@@ -1,7 +1,7 @@
 createdb confrm_dev
 migrate create db_repo "ConfRM Database Repository"
 py db_repo/manage.py version_control postgresql://localhost/confrm_dev db_repo
-
+migrate manage db_repo/manage.py --repository=db_repo --url=postgresql://localhost/confrm_dev
 
 <!-- initializedb.py -->
 import os
