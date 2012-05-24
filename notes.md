@@ -1,7 +1,17 @@
+# User set-up
+
+There are three levels:
+
+admin (superusers)
+teachers (lecturers/presenters)
+students (don't necessarily need to log in, I don't think)
+
+
 createdb confrm_dev
-migrate create db_repo "ConfRM Database Repository"
-py db_repo/manage.py version_control postgresql://localhost/confrm_dev db_repo
+# migrate create db_repo "ConfRM Database Repository"
 migrate manage db_repo/manage.py --repository=db_repo --url=postgresql://localhost/confrm_dev
+python db_repo/manage.py version_control
+python db_repo/manage.py upgrade
 
 <!-- initializedb.py -->
 import os

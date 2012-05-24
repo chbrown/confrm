@@ -19,7 +19,7 @@ requires = [
     ]
 
 setup(name='confrm',
-      version='0.0.1',
+      version='0.0.2',
       description='Conference Resource Management',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[],
