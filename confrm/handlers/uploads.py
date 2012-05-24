@@ -1,6 +1,7 @@
+import os
 from confrm.handlers import BaseHandler
-from confrm.models import DBSession
-from confrm.models.user import User
+# from confrm.models import DBSession
+# from confrm.models.user import User
 
 class UploadHandler(BaseHandler):
     """
@@ -27,14 +28,26 @@ class UploadHandler(BaseHandler):
     def create(self, *args):
         self.format = 'json'
 
-        files = self.request.params.get('files[]', None)
-        print files
+        upload = self.request.params['files[]']
+        localdir = '%s/files' % self.request.registry.settings['package_directory']
+        if not os.path.exists(localdir):
+            os.mkdir(localdir)
+        localpath = '%s/%s' % (localdir, upload.filename)
+        with open(localpath, 'wb') as fp:
+            file_read = upload.file.read()
+            fp.write(file_read)
 
         # fdst = open(os.path.join(tmpdir, os.path.basename(files.filename)), 'wb')
         # shutil.copyfileobj(f.file, fdst)
 
-            # walk in import directory to import all image files
-        results = [{"success": "questionable"}]
+        res = dict(
+            name=upload.filename,
+            # size=
+            url='/uploads/get/%s' % upload.filename,
+            # delete_url=
+            delete_type='DELETE'
+        )
+        self.ctx = [res]
         # result = dict(
         #     name=files.filename,
         #     size=get_size(files.file),
@@ -44,4 +57,4 @@ class UploadHandler(BaseHandler):
         #     delete_url=self.request.route_path('photos_delete', _query=[('uri', uri)]))
         # done.append(result)
 
-        return results
+        # return results

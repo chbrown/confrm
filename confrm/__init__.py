@@ -2,10 +2,12 @@ from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 
 from confrm.models import DBSession, metadata
+from confrm.lib import site
 
 
 def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
+    site.name = settings['name']
     DBSession.configure(bind=engine)
     metadata.bind = engine
 

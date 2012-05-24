@@ -1,6 +1,7 @@
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.httpexceptions import HTTPFound  # HTTPNotFound, HTTPUnauthorized
+from confrm.lib import site
 import json
 
 
@@ -20,12 +21,12 @@ class BaseHandler(object):
 
     def __init__(self, request):
         self.request = request
-        self.ctx = AttrDict()
+        self.ctx = AttrDict(site=site)
         self.__route__(request)
 
     def __call__(self):
-        if format == 'json':
-            return Response(json.dump(self.ctx), content_type='application/json')
+        if self.format == 'json':
+            return Response(json.dumps(self.ctx), content_type='application/json')
         return render_to_response('/%s.mako' % '/'.join(self.path), self.ctx, request=self.request)
 
     def set(self, dictionary):

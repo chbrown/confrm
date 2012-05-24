@@ -1,4 +1,20 @@
 @import "/static/css/bootstrap.css";
+@import "/static/css/prefixer.less";
 
 body {
+  padding-top: 50px;
+}
+
+#navbar {
+  // height: 32px;
+  position: fixed;
+  left: 0; top: 0; width: 100%;
+  .gradient(#F5F5F5, #FFF, #EEE);
+  border-bottom: 1px solid #ddd;
+
+  h1, h2, h3 {
+    vertical-align: middle;
+    margin: 0 10px;
+    display: inline-block;
+  }
 }

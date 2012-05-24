@@ -3,36 +3,13 @@
 <script src="/static/js/jquery-ui.js"></script>
 <script src="/static/js/jquery.iframe-transport.js"></script>
 <script src="/static/js/jquery.fileupload.js"></script>
+<script src="/static/js/jquery.fileupload-fp.js"></script>
 <script src="/static/js/jquery.fileupload-ui.js"></script>
-<script>
-  $('#fileupload').fileupload({
-      acceptFileTypes: /(\.|\/)(csv|tsv|xls|xlsx|txt)$/i,
-      maxFileSize: 20000000,
-      sequentialUploads: true
-  });
-
-  // // Load existing files
-  // $.getJSON($('#fileupload form').prop('action'), function (files) {
-  //     var fu = $('#fileupload').data('fileupload');
-  //     fu._adjustMaxNumberOfFiles(-files.length);
-  //     fu._renderDownload(files)
-  //     .appendTo($('#fileupload .files'))
-  // });
-
-  // Open download dialogs via iframes,
-  // to prevent aborting current uploads
-  // $('#fileupload .files a:not([target^=_blank])').live('click', function (e) {
-  //     e.preventDefault();
-  //     $('<iframe style="display:none;"></iframe>')
-  //     .prop('src', this.href)
-  //     .appendTo('body');
-  // });
-</script>
 
 <div id="fileupload">
   <form action="/uploads/create" method="POST" enctype="multipart/form-data">
     <div class="fileupload-buttonbar">
-      <span class="btn btn-success fileinput-button">
+      <span class="btn btn-primary fileinput-button">
         <i class="icon-plus icon-white"></i> Add files...
         <input type="file" name="files[]" multiple>
       </span>
@@ -125,4 +102,70 @@
             <button data-type="<%text>${delete_type}</%text>" data-url="<%text>${delete_url}</%text>">'Delete'</button>
         </td>
     </tr>
+</script>
+
+<script>
+  function log(a, b) {
+    console.log(arguments);
+  }
+  $('#fileupload form').fileupload({
+    // acceptFileTypes: /(\.|\/)(csv|tsv|xls|xlsx|txt)$/i,
+    maxFileSize: 20000000,
+    autoUpload: true
+  }).bind('fileuploaddestroy',    log)
+    .bind('fileuploadadded',      log)
+    .bind('fileuploadstarted',    log)
+    .bind('fileuploadsent',       log)
+    .bind('fileuploadcompleted',  log)
+    .bind('fileuploadfailed',     log)
+    .bind('fileuploadstopped',    log)
+    .bind('fileuploaddestroyed',  log) // ui above
+    .bind('fileuploadadd',        log)
+    .bind('fileuploadsubmit',     log)
+    .bind('fileuploadsend',       log)
+    .bind('fileuploaddone',       log)
+    .bind('fileuploadfail',       log)
+    .bind('fileuploadalways',     log)
+    .bind('fileuploadprogress',   log)
+    .bind('fileuploadprogressall',log)
+    .bind('fileuploadstart',      log)
+    .bind('fileuploadstop',       log)
+    .bind('fileuploadchange',     log)
+    .bind('fileuploadpaste',      log)
+    .bind('fileuploaddrop',       log)
+    .bind('fileuploaddragover',   log);
+
+    // sequentialUploads: true,
+    // dropZone
+      // {
+      //   action: 'load',
+      //   fileTypes: /^image\/(gif|jpeg|png)$/,
+      //   maxFileSize: 20000000 // 20MB
+      // },
+      // {
+      //   action: 'resize',
+      //   maxWidth: 1440,
+      //   maxHeight: 900
+      // },
+      // {
+        // action: 'save'
+      // }
+    // ]
+
+  // // Load existing files
+  // $.getJSON($('#fileupload form').prop('action'), function (files) {
+  //     var fu = $('#fileupload').data('fileupload');
+  //     fu._adjustMaxNumberOfFiles(-files.length);
+  //     fu._renderDownload(files)
+  //     .appendTo($('#fileupload .files'))
+  // });
+
+  // Open download dialogs via iframes,
+  // to prevent aborting current uploads
+  // $('#fileupload .files a:not([target^=_blank])').live('click', function (e) {
+  //     e.preventDefault();
+  //     $('<iframe style="display:none;"></iframe>')
+  //     .prop('src', this.href)
+  //     .appendTo('body');
+  // });
 </script>

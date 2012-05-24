@@ -9,6 +9,13 @@
 <script src="/static/js/jquery.js"></script>
 <script src="/static/js/date.js"></script>
 <div id="container">
+  <div id="navbar">
+    <h1>ConfRM</h1>
+    <h2>${site.name}</h2>
+    <a href="/users/index" class="btn">Users</a>
+    <a href="/events/index" class="btn">Events</a>
+    <a href="/uploads/index" class="btn">Uploads</a>
+  </div>
   <div id="content">
     ${next.body()}
   </div>
