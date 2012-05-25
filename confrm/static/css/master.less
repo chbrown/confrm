@@ -45,3 +45,31 @@ body {
   .transition(all 0.3s ease-out);
   opacity: 1;
 }
+
+/* tables */
+table.tablesorter {
+  thead tr th, tfoot tr th {
+    // background-color: #e6EEEE;
+  }
+  thead tr .header {
+    background-image: url(/static/img/bg.gif);
+    background-repeat: no-repeat;
+    background-position: center right;
+    cursor: pointer;
+  }
+  tbody td {
+    // color: #3D3D3D;
+    // background-color: #FFF;
+  }
+  tbody tr.odd td {
+  }
+  thead tr .headerSortUp {
+    background-image: url(/static/img/asc.gif);
+  }
+  thead tr .headerSortDown {
+    background-image: url(/static/img/desc.gif);
+  }
+  thead tr .headerSortDown, thead tr .headerSortUp {
+    // background-color: #8dbdd8;
+  }
+}

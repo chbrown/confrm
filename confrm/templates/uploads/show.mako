@@ -1,5 +1,5 @@
 <%inherit file="/master.mako" />
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped tablesorter">
   <thead>
     <tr>
       <td></td>
@@ -19,3 +19,6 @@
     % endfor
   </tbody>
 </table>
+<script>
+  $('.tablesorter').tablesorter();
+</script>

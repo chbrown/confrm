@@ -4,17 +4,27 @@ import xlrd
 import openpyxl
 from pyramid.httpexceptions import HTTPFound
 from confrm.handlers import BaseHandler
+from datetime import datetime
 # from confrm.models import DBSession
 # from confrm.models.user import User
 import re
 
 def read_xls(fp):
-    workbook = xlrd.open_workbook(fp)
+    workbook = xlrd.open_workbook(file_contents=fp.read())
+
+    def clean_excel(cell):
+        if isinstance(cell, (float, int)) and 35000 < cell < 45000:
+            date_tuple = xlrd.xldate_as_tuple(cell, workbook.datemode)
+            return datetime(*date_tuple)
+        else:
+            return cell
+
     sheet_0 = workbook.sheet_by_index(0)
     row_0 = sheet_0.row_values(0)
     rows = []
     for row_i in range(1, sheet_0.nrows):
-        rows.append(sheet_0.row_values(row_i))
+        cells = sheet_0.row_values(row_i)
+        rows.append(map(clean_excel, cells))
     return row_0, rows
 
 def read_xlsx(fp):

@@ -8,6 +8,7 @@
 <script src="/static/js/underscore.js"></script>
 <script src="/static/js/jquery.js"></script>
 <script src="/static/js/jquery.flags.js"></script>
+<script src="/static/js/jquery.tablesorter.js"></script>
 <script src="/static/js/date.js"></script>
 <div id="container">
   <div id="navbar">
