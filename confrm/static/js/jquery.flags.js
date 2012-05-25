@@ -1,3 +1,5 @@
+// Copyright (c) 2011-2012 Christopher Brown (henrian.com)
+// MIT Licensed - http://www.opensource.org/licenses/mit-license.php
 (function($) {
   $.fn.measureBox = function() {
     return {

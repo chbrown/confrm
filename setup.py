@@ -15,7 +15,9 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'mako',
-    'psycopg2'
+    'psycopg2',
+    'xlrd',
+    'openpyxl',
     ]
 
 setup(name='confrm',

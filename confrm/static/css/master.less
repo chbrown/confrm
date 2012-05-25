@@ -2,7 +2,10 @@
 @import "/static/css/prefixer.less";
 
 body {
-  padding-top: 50px;
+  padding-top: 37px;
+}
+#content {
+  padding: 10px;
 }
 
 #navbar {
@@ -17,4 +20,28 @@ body {
     margin: 0 10px;
     display: inline-block;
   }
+}
+
+.fileupload-buttonbar {
+  input, button {
+    vertical-align: top;
+  }
+}
+#dropzone {
+    padding: 3px 50px;
+    display: inline-block;
+}
+#dropzone.in {
+  // width: 600px;
+  // height: 200px;
+  // line-height: 200px;
+  // font-size: larger;
+  background: #bbb;
+}
+#dropzone.hover {
+  background: #999;
+}
+#dropzone.fade {
+  .transition(all 0.3s ease-out);
+  opacity: 1;
 }
