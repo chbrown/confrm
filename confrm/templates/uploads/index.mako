@@ -1,4 +1,4 @@
-<%inherit file="/master.mako" />
+<%inherit file='/master.mako' />
 <link href="/static/css/jquery.fileupload-ui.css" rel="stylesheet" />
 <script src="/static/js/jquery-ui.js"></script>
 <script src="/static/js/jquery.iframe-transport.js"></script>

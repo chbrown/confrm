@@ -17,6 +17,9 @@ def main(global_config, **settings):
     config.add_route('users', '/users/*args')
     config.add_view('confrm.handlers.users.UserHandler', route_name='users')
 
+    config.add_route('events', '/events/*args')
+    config.add_view('confrm.handlers.events.EventHandler', route_name='events')
+
     config.add_route('user_sessions', '/user_sessions/*args')
     config.add_view('confrm.handlers.user_sessions.UserSessionHandler', route_name='user_sessions')
 

@@ -5,16 +5,16 @@ meta = MetaData()
 events_users = Table(
     'events_users', meta,
     Column('id', Integer, primary_key=True),
-    Column('event_id', Integer, ForeignKey("events.id")),
-    Column('user_id', Integer, ForeignKey("users.id")),
-    Column('role_id', Integer, ForeignKey("roles.id")),
+    Column('event_id', Integer, ForeignKey('events.id')),
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('role_id', Integer, ForeignKey('roles.id')),
     Column('starts', DateTime),
     Column('ends', DateTime),
 
     Column('created', DateTime, default=func.now()),
-    Column('created_by_id', Integer, ForeignKey("users.id")),
+    Column('created_by_id', Integer, ForeignKey('users.id')),
     Column('deleted', DateTime),
-    Column('deleted_by_id', Integer, ForeignKey("users.id"))
+    Column('deleted_by_id', Integer, ForeignKey('users.id'))
 )
 
 

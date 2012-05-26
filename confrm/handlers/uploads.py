@@ -1,66 +1,10 @@
 import os
-import csv
-import xlrd
-import openpyxl
+import re
 from pyramid.httpexceptions import HTTPFound
 from confrm.handlers import BaseHandler
-from datetime import datetime
 # from confrm.models import DBSession
 # from confrm.models.user import User
-import re
-
-def read_xls(fp):
-    workbook = xlrd.open_workbook(file_contents=fp.read())
-
-    def clean_excel(cell):
-        if isinstance(cell, (float, int)) and 35000 < cell < 45000:
-            date_tuple = xlrd.xldate_as_tuple(cell, workbook.datemode)
-            return datetime(*date_tuple)
-        else:
-            return cell
-
-    sheet_0 = workbook.sheet_by_index(0)
-    row_0 = sheet_0.row_values(0)
-    rows = []
-    for row_i in range(1, sheet_0.nrows):
-        cells = sheet_0.row_values(row_i)
-        rows.append(map(clean_excel, cells))
-    return row_0, rows
-
-def read_xlsx(fp):
-    workbook = openpyxl.load_workbook(fp)
-    # sheets = workbook.worksheets; sheets[0].title
-    sheet_0 = workbook.get_active_sheet()
-    all_rows = [[cell.value or '' for cell in row] for row in sheet_0.rows]
-    # [map(unicode, row) for row in all_rows]
-    row_0 = all_rows[0]
-    rows = all_rows[1:]
-
-    # value=value.encode('utf8')
-    return row_0, rows
-
-def read_csv(csv_fp):
-    row_0 = csv_fp.next()
-    rows = list(csv_fp)
-    return row_0, rows
-
-def read_table(filename, fp):
-    """
-    A 'table' is a list of headers, and a list of rows.
-    Empty rows and empty columns should not be present.
-    """
-    if filename.endswith('.xls'):
-        return read_xls(fp)
-    elif filename.endswith('.xlsx'):
-        return read_xlsx(fp)
-    line0 = fp.readline()
-    fp.seek(0)
-    if len(re.findall('\t', line0)) > 0:
-        return read_csv(csv.reader(fp, delimiter='\t'))
-    elif len(re.findall(',', line0)) > 0:
-        return read_csv(csv.reader(fp))
-    else:
-        return read_csv(csv.reader(fp, delimiter=' '))
+from confrm.lib.table import read_table
 
 class UploadHandler(BaseHandler):
     """
@@ -88,9 +32,27 @@ class UploadHandler(BaseHandler):
     def show(self, filename):
         filepath = '%s/%s' % (self.localdir, filename)
         with open(filepath) as fp:
-            row_0, rows = read_table(filename, fp)
-            self.ctx.headers = row_0
-            self.ctx.data = rows
+            rows = read_table(filename, fp)
+            flat_row_0 = ' '.join(rows[0])
+            if len(re.findall('email|first|last|name', flat_row_0, re.I)) > 0:
+                print 'found match'
+                self.ctx.headers = rows[0]
+                self.ctx.data = rows[1:]
+            else:
+                self.ctx.data = rows
+                headers = []
+                for cell in rows[0]:
+                    if '@' in cell:
+                        headers.append('email')
+                    elif ' ' in cell:
+                        headers.append('full_name')
+                    elif 'first_name' not in headers:
+                        headers.append('first_name')
+                    elif 'last_name' not in headers:
+                        headers.append('last_name')
+                    else:
+                        headers.append('')
+                self.ctx.headers = headers
 
     def create(self, *args):
         self.format = 'json'

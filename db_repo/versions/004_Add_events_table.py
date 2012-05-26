@@ -11,11 +11,11 @@ events = Table(
     Column('json', UnicodeText),
 
     Column('created', DateTime, default=func.now()),
-    Column('created_by_id', Integer, ForeignKey("users.id")),
+    Column('created_by_id', Integer, ForeignKey('users.id')),
     Column('archived', DateTime),
-    Column('archived_by_id', Integer, ForeignKey("users.id")),
+    Column('archived_by_id', Integer, ForeignKey('users.id')),
     Column('deleted', DateTime),
-    Column('deleted_by_id', Integer, ForeignKey("users.id")),
+    Column('deleted_by_id', Integer, ForeignKey('users.id')),
 )
 
 

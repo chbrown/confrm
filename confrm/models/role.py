@@ -1,5 +1,5 @@
-from sqlalchemy import Table
-from confrm.models import DeclarativeBase, metadata
+from confrm.models import DeclarativeBase
+from confrm.models.tables import roles
 
 class Role(DeclarativeBase):
-    __table__ = Table('roles', metadata, autoload=True)
+    __table__ = roles
