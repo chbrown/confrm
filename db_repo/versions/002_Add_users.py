@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, ForeignKey, MetaData, func, \
+from sqlalchemy import Table, Column, ForeignKey, MetaData, text, \
     Integer, Unicode, UnicodeText, DateTime, Boolean
 meta = MetaData()
 
@@ -26,7 +26,7 @@ users = Table(
     Column('notes', Unicode),
     Column('json', UnicodeText),
 
-    Column('created', DateTime, default=func.now()),
+    Column('created', DateTime, server_default=text('NOW()')),
     Column('created_by_id', Integer, ForeignKey('users.id')),
     Column('archived', DateTime),
     Column('archived_by_id', Integer, ForeignKey('users.id')),

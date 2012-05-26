@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, MetaData, func, \
+from sqlalchemy import Table, Column, MetaData, text, \
     Integer, Unicode, DateTime
 meta = MetaData()
 
@@ -8,7 +8,7 @@ roles = Table(
     Column('id', Integer, primary_key=True),
     Column('level', Integer),
     Column('name', Unicode),
-    Column('created', DateTime, default=func.now()),
+    Column('created', DateTime, server_default=text('NOW()')),
 )
 
 

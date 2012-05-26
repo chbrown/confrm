@@ -1,7 +1,37 @@
 # Running
 
 cd ~/work/confrm-dev
+source bin/activate
 pserve --reload src/development.ini
+
+# User set-up
+
+There are three levels:
+
+admin (superusers)
+teachers (lecturers/presenters)
+students (don't necessarily need to log in, I don't think)
+
+# DB Initialization / updates
+
+createdb confrm_dev
+# migrate create db_repo "ConfRM Database Repository"
+migrate manage db_repo/manage.py --repository=db_repo --url=postgresql://localhost/confrm_dev
+python db_repo/manage.py version_control
+python db_repo/manage.py upgrade
+
+# Amazon SES (for sending email) config
+
+Put the following in /etc/boto.cfg
+
+    [Credentials]
+    aws_access_key_id=<your_key>
+    aws_secret_access_key=<your_secret_key>
+
+Or make them env variables:
+
+    export AWS_ACCESS_KEY_ID=SAKSAUI21AS98213AWE8
+    export AWS_SECRET_ACCESS_KEY=AAKSD9aLPOi898LASOWI7naLA8an2NEW7cn9ALHE
 
 # Migration examples:
 

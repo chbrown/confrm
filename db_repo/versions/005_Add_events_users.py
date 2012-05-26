@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, MetaData, ForeignKey, func, \
+from sqlalchemy import Table, Column, MetaData, ForeignKey, text, \
     Integer, Unicode, DateTime
 meta = MetaData()
 
@@ -11,7 +11,7 @@ events_users = Table(
     Column('starts', DateTime),
     Column('ends', DateTime),
 
-    Column('created', DateTime, default=func.now()),
+    Column('created', DateTime, server_default=text('NOW()')),
     Column('created_by_id', Integer, ForeignKey('users.id')),
     Column('deleted', DateTime),
     Column('deleted_by_id', Integer, ForeignKey('users.id'))

@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, MetaData, ForeignKey, func, \
+from sqlalchemy import Table, Column, MetaData, ForeignKey, text, \
     Integer, Unicode, UnicodeText, DateTime
 meta = MetaData()
 
@@ -10,7 +10,7 @@ events = Table(
 
     Column('json', UnicodeText),
 
-    Column('created', DateTime, default=func.now()),
+    Column('created', DateTime, server_default=text('NOW()')),
     Column('created_by_id', Integer, ForeignKey('users.id')),
     Column('archived', DateTime),
     Column('archived_by_id', Integer, ForeignKey('users.id')),

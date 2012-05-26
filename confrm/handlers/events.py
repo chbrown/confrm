@@ -1,6 +1,8 @@
+import boto
 from confrm.handlers import BaseHandler
 from confrm.models import DBSession
-from confrm.models.user import Event
+from confrm.models.user import User, EventUser
+from confrm.models.event import Event
 
 class EventHandler(BaseHandler):
     base = 'events'
@@ -39,16 +41,16 @@ class EventHandler(BaseHandler):
         self.ctx.event = event
 
     def compose_email(self, event_id):
-        event = DBSession.query(Event).get(event_id)
-
-        self.ctx.event = event
-        self.ctx.event_users = event.users
+        self.ctx.from_users = DBSession.query(User).filter(User.email=='nasslli@nasslli2012.com').first()
+        self.ctx.event = DBSession.query(Event).get(event_id)
+        self.ctx.event_users = DBSession.query(EventUser).filter(EventUser.event_id==event_id)
 
     def send_email(self, event_id):
-        event = DBSession.query(Event).get(event_id)
+        # event = DBSession.query(Event).get(event_id)
 
-        subject = self.request.POST['body']
-        body = self.request.POST['body']
-        users = self.request.POST['users']
-        for user in users:
-            ses_conn.send_email('audiere@gmail.com', 'hey chb', body, ['io@henrian.com'])
+        params = self.request.POST
+        from_user = DBSession.query(User).get(params['from_user'])
+        to_users = DBSession.query(User).filter(User.id.in_(params['to_users']))
+
+        ses_conn = boto.connect_ses()
+        ses_conn.send_email(from_user, params['subject'], params['body'], [to_user.full_email for to_user in to_users])

@@ -18,6 +18,7 @@ requires = [
     'psycopg2',
     'xlrd',
     'openpyxl',
+    'boto',
     ]
 
 setup(name='confrm',

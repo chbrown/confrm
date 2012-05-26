@@ -22,18 +22,18 @@
   <tr>
     <td>${user.email}</td>
     <td>${user.first_name}</td>
-    <td>${user.middle_name}</td>
+    <td>${user.middle_name or ''}</td>
     <td>${user.last_name}</td>
-    <td>${user.other_emails}</td>
-    <td>${user.role}</td>
-    <td>${user.classification}</td>
-    <td>${user.institution}</td>
-    <td>${user.department}</td>
-    <td>${user.international}</td>
-    <td>${user.notes}</td>
+    <td>${user.other_emails or ''}</td>
+    <td>${user.role.name}</td>
+    <td>${user.classification or ''}</td>
+    <td>${user.institution or ''}</td>
+    <td>${user.department or ''}</td>
+    <td>${user.international or ''}</td>
+    <td>${user.notes or ''}</td>
     <td>${user.created}</td>
-    <td>${user.archived}</td>
-    <td>${user.deleted}</td>
+    <td>${user.archived or ''}</td>
+    <td>${user.deleted or ''}</td>
   </tr>
 % endfor
 </table>

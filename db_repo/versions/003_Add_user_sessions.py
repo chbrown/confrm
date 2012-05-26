@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, MetaData, func, \
+from sqlalchemy import Table, Column, MetaData, text, \
     Integer, Unicode, ForeignKey, DateTime
 meta = MetaData()
 
@@ -10,7 +10,7 @@ user_sessions = Table(
     Column('ip', Unicode),
     Column('user_agent', Unicode),
 
-    Column('created', DateTime, default=func.now()),
+    Column('created', DateTime, server_default=text('NOW()')),
     Column('deleted', DateTime),
 )
 

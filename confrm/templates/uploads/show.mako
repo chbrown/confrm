@@ -34,7 +34,7 @@
 <table class="table table-bordered table-striped tablesorter">
   <thead>
     <tr>
-      <td></td>
+      <th></th>
       % for header in headers:
         <th>${header}</th>
       % endfor
@@ -52,7 +52,45 @@
   </tbody>
 </table>
 <script>
+  function User() { }
+  User.prototype.add = function(key, value) {
+    if (key === 'full_name') {
+      var name_parts = value.split(/\s+/);
+      this.first_name = name_parts[0];
+      if (name_parts.length > 2) {
+        this.middle_name = name_parts.slice(1, name_parts.length - 1).join(' ');
+      }
+      this.last_name = name_parts[name_parts.length - 1];
+    }
+    else if (key) {
+      this[key] = value;
+    }
+  }
   $('.tablesorter').tablesorter();
+  $('button[type=submit]').click(function() {
+    var headers = $('table thead th').map(function(i, th) {
+      return $(th).text();
+    }).toArray();
+    var users = $('table tbody tr').map(function(i, tr) {
+      // zip headers+data
+      var user = new User();
+      $(tr).children('td').each(function(i, td) {
+        user.add(headers[i], $(td).text());
+      })
+      return user;
+    }).toArray();
+    var tags = $('#tags').val().replace(/[ _]+/g, '-').split(',');
+    var role = $('#role option:selected').val();
+    $.ajax('/uploads/update/${filename}', {
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({tags: tags, role: role, users: users}),
+      dataType: 'json',
+      success: function(data, textStatus, jqXHR) {
+        console.log(data, textStatus, jqXHR);
+      }
+    });
+  });
 </script>
 
 <div class="form-horizontal">

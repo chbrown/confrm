@@ -1,7 +1,7 @@
 from sqlalchemy import Table
 from confrm.models import metadata
 
-roles = Table('users', metadata, autoload=True)
+roles = Table('roles', metadata, autoload=True)
 users = Table('users', metadata, autoload=True)
 user_sessions = Table('user_sessions', metadata, autoload=True)
 events = Table('events', metadata, autoload=True)
