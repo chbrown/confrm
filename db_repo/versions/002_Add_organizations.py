@@ -18,10 +18,6 @@ def upgrade(migrate_engine):
     meta.bind = migrate_engine
     organizations.create()
 
-    bootstrap_insert = organizations.insert().values(slug=u'nasslli2012', name=u'NASSLLI 2012')
-    migrate_engine.execute(bootstrap_insert)
-
-
 def downgrade(migrate_engine):
     meta.bind = migrate_engine
     organizations.drop()

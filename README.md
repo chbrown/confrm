@@ -100,3 +100,5 @@ Or make them env variables:
 6. Allow users to have some per-organization preferences, versus global info.
 This is not a big issue, since most deploys will be 1-organization. But you can stick that stuff on the organizations_users many2many relationship. (Question: What user info _is_ per-organization?)
 7. Outgoing emails should always be recorded ("broadcasts"?), attached to an group.
+
+python confrm/scripts/add.py development.ini --email audiere@gmail.com --password needle --slug nasslli2012 --name "NASSLLI 2012"

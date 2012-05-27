@@ -10,6 +10,7 @@
 <script src="/static/js/jquery.flags.js"></script>
 <script src="/static/js/jquery.tablesorter.js"></script>
 <script src="/static/js/date.js"></script>
+<script src="/static/js/confrm.js"></script>
 <div id="navbar">
   <h2>ConfRM</h2>
   % if organization:

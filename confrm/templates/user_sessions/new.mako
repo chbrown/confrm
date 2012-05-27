@@ -25,6 +25,12 @@ $('button[type=submit]').click(function() {
     dataType: 'json',
     success: function(data, textStatus, jqXHR) {
       $('button[type=submit]').flag({text: data.message});
+      if (data.success) {
+        $.cookie('ticket', data.ticket);
+      }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      $('button[type=submit]').flag({text: 'Connection failed: ' + textStatus});
     }
   });
 });
