@@ -1,15 +1,13 @@
 from sqlalchemy import Table, Column, MetaData, ForeignKey, text, \
-    Integer, Unicode, DateTime
+    Integer, DateTime
 meta = MetaData()
 
-events_users = Table(
-    'events_users', meta,
+groups_users = Table(
+    'groups_users', meta,
     Column('id', Integer, primary_key=True),
-    Column('event_id', Integer, ForeignKey('events.id')),
-    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('group_id', Integer, ForeignKey('groups.id'), nullable=False),
+    Column('user_id', Integer, ForeignKey('users.id'), nullable=False),
     Column('role_id', Integer, ForeignKey('roles.id')),
-    Column('starts', DateTime),
-    Column('ends', DateTime),
 
     Column('created', DateTime, server_default=text('NOW()')),
     Column('created_by_id', Integer, ForeignKey('users.id')),
@@ -20,12 +18,12 @@ events_users = Table(
 
 def upgrade(migrate_engine):
     meta.bind = migrate_engine
-    Table('events', meta, autoload=True, autoload_with=migrate_engine)
+    Table('groups', meta, autoload=True, autoload_with=migrate_engine)
     Table('users', meta, autoload=True, autoload_with=migrate_engine)
     Table('roles', meta, autoload=True, autoload_with=migrate_engine)
-    events_users.create()
+    groups_users.create()
 
 
 def downgrade(migrate_engine):
     meta.bind = migrate_engine
-    events_users.drop()
+    groups_users.drop()

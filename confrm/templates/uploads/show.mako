@@ -66,7 +66,6 @@
       this[key] = value;
     }
   }
-  $('.tablesorter').tablesorter();
   $('button[type=submit]').click(function() {
     var headers = $('table thead th').map(function(i, th) {
       return $(th).text();
@@ -87,6 +86,7 @@
       data: JSON.stringify({tags: tags, role: role, users: users}),
       dataType: 'json',
       success: function(data, textStatus, jqXHR) {
+        $('button[type=submit]').flag({text: 'Imported users.'});
         console.log(data, textStatus, jqXHR);
       }
     });

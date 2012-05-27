@@ -24,4 +24,5 @@
   </div>
 </div>
 <script>
+  $('.tablesorter').tablesorter();
 </script>

@@ -73,7 +73,10 @@
         this.$flag.css('top', this.target_offset.top);
       }
       else if (this.align === 'm') {
-        this.$flag.css('top', this.target_offset.top + (this.target_size.height / 2) - (flag_size.height / 2));
+        var flag_top = this.target_offset.top +
+          (this.target_size.height / 2.0) -
+          (flag_size.height / 2.0);
+        this.$flag.css('top', flag_top);
       }
       else {
         this.$flag.css('top', this.target_offset.top + this.target_size.height - flag_size.height);

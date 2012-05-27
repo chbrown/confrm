@@ -11,19 +11,18 @@ users = Table(
     Column('middle_name', Unicode),
     Column('last_name', Unicode),
     Column('other_emails', Unicode),
-    Column('role_id', Integer, ForeignKey('roles.id')),
 
     Column('classification', Unicode),
     Column('institution', Unicode),
     Column('department', Unicode),
     Column('international', Boolean),
+    Column('notes', Unicode),
 
     Column('url', Unicode),
     Column('photo', Unicode),
     Column('biography', Unicode),
 
-    Column('tags', Unicode),  # other categories they belong to
-    Column('notes', Unicode),
+    Column('tags', Unicode),
     Column('json', UnicodeText),
 
     Column('created', DateTime, server_default=text('NOW()')),

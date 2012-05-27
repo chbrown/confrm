@@ -6,8 +6,8 @@ meta = MetaData()
 roles = Table(
     'roles', meta,
     Column('id', Integer, primary_key=True),
-    Column('level', Integer),
-    Column('name', Unicode),
+    Column('level', Integer, nullable=False),
+    Column('name', Unicode, nullable=False),
     Column('created', DateTime, server_default=text('NOW()')),
 )
 

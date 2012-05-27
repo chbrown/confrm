@@ -44,3 +44,10 @@ class User(UserSchema):
     @property
     def full_name(self):
         return ' '.join(filter(None, self.first_name, self.last_name))
+
+    def merge(self, other_user):
+        for col in self.__table__.columns:
+            field = col.name
+            other_value = getattr(other_user, field, None)
+            if other_value:
+                setattr(self, field, other_value)

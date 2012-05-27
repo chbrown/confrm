@@ -5,7 +5,7 @@ meta = MetaData()
 user_sessions = Table(
     'user_sessions', meta,
     Column('id', Integer, primary_key=True),
-    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('user_id', Integer, ForeignKey('users.id'), nullable=False),
     Column('ticket', Unicode),
     Column('ip', Unicode),
     Column('user_agent', Unicode),

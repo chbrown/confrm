@@ -7,7 +7,6 @@ from confrm.models import DBSession
 from confrm.models.role import Role
 from confrm.models.user import User
 from confrm.lib.table import read_table
-import transaction
 
 def parse_request(request):
     if request.content_type == 'application/json':
@@ -96,30 +95,22 @@ class UploadHandler(BaseHandler):
         tag_csv = ','.join(params['tags'])
         role = DBSession.query(Role).filter(Role.name==params['role']).first()
         for user_dict in params['users']:
+            new_user = User(**user_dict)
+            if tag_csv:
+                new_user.tags = tag_csv
+            if role:
+                new_user.role_id = role.id
             try:
-                user = User(**user_dict)
-                if tag_csv:
-                    user.tags = tag_csv
-                if role:
-                    user.role_id = role.id
-                # savepoint = transaction.savepoint()
                 DBSession.begin_nested()
-                DBSession.add(user)
+                DBSession.add(new_user)
                 DBSession.flush()
-                # savepoint = None
                 print 'Adding user', user_dict['email']
             except sqlalchemy.exc.IntegrityError, exc:
                 DBSession.rollback()
-                # transaction.abort()
-                print 'Duplicate key error', user_dict['email']
                 self.flash(str(exc), success=False)
-                # resolve duplicate user
                 user = DBSession.query(User).filter(User.email==user_dict['email']).first()
-                update_attributes(user, user_dict)
+                user.merge(new_user)
                 DBSession.flush()
-                print 'Updating user', user_dict['email']
-            # except Exception, exc:
-                # print 'Other error', exc
 
     def delete(self, filename):
         filename = filename.replace('..', '')

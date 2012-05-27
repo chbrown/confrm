@@ -1,3 +1,22 @@
+# To-do
+
+DONE 1. Rename Events to Groups, remove json. Just have role, and maybe tags.
+2. Recreate Events, with group_id column. Or maybe have it inherit? Except that I hate polymorphic inheritance in a databse.
+3. Create dashboard.
+  For superusers, this won't be much.
+  For teachers, it would allow uploads and emails.
+  For students, it would be basically emails they've been sent and files they have access to.
+4. Each action has a list of (view|modify, resource) pairs
+4b. If there are any (mod, x) entries, require the request to be a POST, to beat XSS attacks.
+5. organization object. Every group has an organization id. There are user_organization attachments.
+6. will users have any per-organization preferences?
+  Not a big issue, since most deploys will be 1-org.
+  But you can stick that stuff on user_organizations many2many's
+  What user info is per-org?
+7. Store emails as broadcasts, attached to an event.
+
+
+
 # Running
 
 cd ~/work/confrm-dev
