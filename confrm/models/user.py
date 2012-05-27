@@ -1,6 +1,6 @@
 from sqlalchemy.orm import relationship
 from confrm.models import DeclarativeBase, DBSession
-from confrm.models.tables import users, user_sessions, roles
+from confrm.models.tables import users, user_sessions
 from confrm.models.group import Group, GroupUser
 # from confrm.models.role import Role
 

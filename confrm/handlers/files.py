@@ -1,15 +1,20 @@
-import os
+# import os
 from datetime import datetime
 from pyramid.httpexceptions import HTTPFound
 from confrm.handlers import BaseHandler
-from confrm.models import DBSession, File
+from confrm.models import DBSession, File, FileGroup, GroupUser, FileUser
 
 class FileHandler(BaseHandler):
     base = 'files'
 
     def index(self, *args):
-        filenames = os.listdir(self.localdir)
-        self.ctx.uploads = [filename for filename in filenames if not filename.startswith('.')]
+        group_files = DBSession.query(File).join(FileGroup).join(GroupUser).\
+            filter(GroupUser.user_id==self.user.id).all()
+        user_files = DBSession.query(File).join(FileUser).filter(FileUser.user_id==self.user.id).all()
+        # filenames = os.listdir(self.localdir)
+        self.ctx.group_files = group_files
+        self.ctx.user_files = user_files
+        # [filename for filename in filenames if not filename.startswith('.')]
 
     def create(self, *args):
         self.format = 'json'

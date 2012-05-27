@@ -18,7 +18,7 @@ def main(global_config, **settings):
     config.add_view('confrm.handlers.users.UserHandler', route_name='users')
     config.add_route('user_sessions', '/user_sessions/*args')
     config.add_view('confrm.handlers.user_sessions.UserSessionHandler', route_name='user_sessions')
-    config.add_route('files', '/groups/{group_id}/files/*args')
+    config.add_route('files', '/files/*args')
     config.add_view('confrm.handlers.files.FileHandler', route_name='files')
 
     # per-Org

@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2012 Christopher Brown (henrian.com)
+//   git://github.com/chbrown/jQuery-Flags.git
 // MIT Licensed - http://www.opensource.org/licenses/mit-license.php
 (function($) {
   $.fn.measureBox = function() {
@@ -20,8 +21,9 @@
 
   function Flag($target, anchor, align, parent) {
     var self = this;
-    this.anchor = anchor;
     this.$target = $target;
+    this.anchor = anchor;
+    this.align = align;
     this.parent = parent;
 
     this.target_offset = $target.offset(); // { left: 999, top: 999 }
@@ -69,7 +71,7 @@
       }
 
       // handle alignment (top/middle/bottom)
-      if (this.anchor === 't') {
+      if (this.align === 't') {
         this.$flag.css('top', this.target_offset.top);
       }
       else if (this.align === 'm') {

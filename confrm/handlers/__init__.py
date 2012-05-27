@@ -3,7 +3,7 @@ from mako.exceptions import TopLevelLookupException
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.httpexceptions import HTTPFound  # HTTPNotFound, HTTPUnauthorized
-from confrm.models import UserSession
+from confrm.models import DBSession, UserSession
 
 def error404(request):
     return HTTPFound(location='/users/index')
@@ -47,6 +47,7 @@ class BaseHandler(object):
         try:
             return render_to_response('/%s.mako' % '/'.join(self.path), self.ctx, request=self.request)
         except TopLevelLookupException:
+            print 'Could not find mako, resorting to json.'
             return self.__json__()
 
     def set_ctx(self, **kw):
@@ -60,9 +61,10 @@ class BaseHandler(object):
     @property
     def user(self):
         ticket = self.request.session.get('ticket')
-        user_session = UserSession.filter(UserSession.ticket==ticket).first()
+        user_session = DBSession.query(UserSession).filter(UserSession.ticket==ticket).first()
         if user_session:
             return user_session.user
+        raise HTTPFound(location='/user_sessions/new?flash="Please sign in first."')
 
     def can_view(self, resource):
         self.user.can

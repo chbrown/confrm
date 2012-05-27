@@ -10,21 +10,22 @@
 <script src="/static/js/jquery.flags.js"></script>
 <script src="/static/js/jquery.tablesorter.js"></script>
 <script src="/static/js/date.js"></script>
-<div id="container">
-  <div id="navbar">
-    <h2>ConfRM</h2>
-    % if organization:
-      <h3>${organization.name}</h3>
-    % endif
-    <!-- <i class="icon-home"></i> -->
-    <a href="/users/index" class="btn"><i class="icon-user"></i> Users</a>
-    <a href="/events/index" class="btn"><i class="icon-calendar"></i> Events</a>
-    <a href="/uploads/index" class="btn"><i class="icon-plus"></i> Uploads</a>
-  </div>
-  <div id="content">
-    ${next.body()}
-  </div>
+<div id="navbar">
+  <h2>ConfRM</h2>
+  % if organization:
+    <h3>${organization.name}</h3>
+  % endif
+  <!-- <i class="icon-home"></i> -->
+  <a href="/users/index" class="btn"><i class="icon-user"></i> Users</a>
+  <a href="/files/index" class="btn"><i class="icon-plus"></i> Files</a>
+  <a href="/groups/index" class="btn"><i class="icon-calendar"></i> Groups</a>
+</div>
+<div class="container">
+  ${next.body()}
 </div>
 <script>
   $('.tablesorter').tablesorter();
+  var flash = window.location.search.match(/[?&]flash=([^?&]+)/);
+  if (flash)
+    $('#navbar h2').flag({text: flash[1]});
 </script>
