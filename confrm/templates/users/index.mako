@@ -1,7 +1,7 @@
 <%inherit file='/master.mako' />
 
 <h3>All Users</h3>
-<table class="table table-bordered table-striped tablesorter">
+<table class="table table-bordered table-striped table-condensed tablesorter">
   <tr>
     <th>Email</th>
     <th>First name</th>

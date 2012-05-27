@@ -1,16 +1,7 @@
-import random
-import hashlib
-
 from confrm.handlers import BaseHandler
 from confrm.models import DBSession
 from confrm.models.user import User, UserSession
-
-def hash_password(string):
-    return hashlib.sha256(string).hexdigest()
-
-def random_ticket():
-    store = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-    return ''.join(random.sample(store, 40))
+from confrm.lib import hash_password, random_ticket
 
 class UserSessionHandler(BaseHandler):
     def create(self):
@@ -28,6 +19,6 @@ class UserSessionHandler(BaseHandler):
         else:
             self.ctx.set(success=False, message='Authenticiation failed.')
 
-    def update(self, user_id):
-        user = DBSession.query(User).get(user_id)
+    # def update(self, user_id):
+        # user = DBSession.query(User).get(user_id)
         # if user ==

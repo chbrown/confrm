@@ -13,7 +13,9 @@
 <div id="container">
   <div id="navbar">
     <h2>ConfRM</h2>
-    <h3>${site.name}</h3>
+    % if organization:
+      <h3>${organization.name}</h3>
+    % endif
     <!-- <i class="icon-home"></i> -->
     <a href="/users/index" class="btn"><i class="icon-user"></i> Users</a>
     <a href="/events/index" class="btn"><i class="icon-calendar"></i> Events</a>

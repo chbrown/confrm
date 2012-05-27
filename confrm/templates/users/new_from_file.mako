@@ -10,6 +10,20 @@
         <p class="help-block">What tags should be applied to each user below?</p>
         <p class="help-block">Separate with commas. Spaces and underscores will be merged and converted to hyphens.</p>
       </div>
+      <label class="checkbox">
+        <input type="checkbox" id="additive_tags" checked="checked">
+        Add tags to user if user already exists
+      </label>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="groups">Groups</label>
+      <div class="controls">
+        <select multiple="multiple" id="multiSelect">
+          % for group in groups:
+            <option value="${group.id}">${group.name}</option>
+          % endfor
+        </select>
+      </div>
     </div>
     <div class="control-group">
       <label class="control-label" for="role">Role</label>
@@ -65,7 +79,7 @@
     else if (key) {
       this[key] = value;
     }
-  }
+  };
   $('button[type=submit]').click(function() {
     var headers = $('table thead th').map(function(i, th) {
       return $(th).text();
@@ -80,16 +94,21 @@
     }).toArray();
     var tags = $('#tags').val().replace(/[ _]+/g, '-').split(',');
     var role = $('#role option:selected').val();
-    $.ajax('/uploads/update/${filename}', {
+    var additive_tags = $('#additive_tags').prop('checked');
+    $.ajax('/users/create', {
       type: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({tags: tags, role: role, users: users}),
+      data: JSON.stringify({tags: tags, role: role, users: users, additive_tags: additive_tags}),
       dataType: 'json',
       success: function(data, textStatus, jqXHR) {
         $('button[type=submit]').flag({text: 'Imported users.'});
         console.log(data, textStatus, jqXHR);
       }
     });
+  });
+  $('#tags').change(function() {
+    var value = $('#tags').val();
+    $('#tags').val(value.replace(/[ _]+/g, '-'));
   });
 </script>
 

@@ -46,3 +46,24 @@ def read_table(filename, fp):
         return list(csv.reader(fp))
     else:
         return list(csv.reader(fp, delimiter=' '))
+
+def guess_headers(rows):
+    flat_row_0 = ' '.join(rows[0])
+    if len(re.findall('email|first|last|name', flat_row_0, re.I)) > 0:
+        print 'found match'
+        return rows[0], rows[1:]
+    else:
+        # self.ctx.data = rows
+        headers = []
+        for cell in rows[0]:
+            if '@' in cell:
+                headers.append('email')
+            elif ' ' in cell:
+                headers.append('full_name')
+            elif 'first_name' not in headers:
+                headers.append('first_name')
+            elif 'last_name' not in headers:
+                headers.append('last_name')
+            else:
+                headers.append('')
+        return headers, rows

@@ -3,7 +3,8 @@
 ConfRM, which stands for Conference Resource Management, intends to be a way to annotate and manage groups of users. Primary functionality is (/will be):
 
 1. Uploading and importing from several different kinds of spreadsheet (XLS, XLSX, csv, tab), with duplicate handling.
-2. 
+2. Sending emails to groups of students, by tag or group.
+3. Uploading files for students to see.
 
 It's intended to be a sort of mini-BlackBoard. Except not violating every convention of web UX.
 
