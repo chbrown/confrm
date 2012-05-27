@@ -1,58 +1,59 @@
-# To-do
+# ConfRM
 
-DONE 1. Rename Events to Groups, remove json. Just have role, and maybe tags.
-2. Recreate Events, with group_id column. Or maybe have it inherit? Except that I hate polymorphic inheritance in a databse.
-3. Create dashboard.
-  For superusers, this won't be much.
-  For teachers, it would allow uploads and emails.
-  For students, it would be basically emails they've been sent and files they have access to.
-4. Each action has a list of (view|modify, resource) pairs
-4b. If there are any (mod, x) entries, require the request to be a POST, to beat XSS attacks.
-5. organization object. Every group has an organization id. There are user_organization attachments.
-6. will users have any per-organization preferences?
-  Not a big issue, since most deploys will be 1-org.
-  But you can stick that stuff on user_organizations many2many's
-  What user info is per-org?
-7. Store emails as broadcasts, attached to an event.
+ConfRM, which stands for Conference Resource Management, intends to be a way to annotate and manage groups of users. Primary functionality is (/will be):
 
+1. Uploading and importing from several different kinds of spreadsheet (XLS, XLSX, csv, tab), with duplicate handling.
+2. 
 
+It's intended to be a sort of mini-BlackBoard. Except not violating every convention of web UX.
 
-# Running
+## Running for Development
 
-cd ~/work/confrm-dev
-source bin/activate
-pserve --reload src/development.ini
+	j confrm-dev
+	source bin/activate
+	cd src/
+	python setup.py develop
+	pserve --reload development.ini
 
-# User set-up
+## Roles
 
-There are three levels:
+There are five levels of roles, which are bootstrapped into the database, but which are hard-coded, in a way, by using their names in the app:
 
-admin (superusers)
-teachers (lecturers/presenters)
-students (don't necessarily need to log in, I don't think)
+1. superuser
+2. admin
+3. teacher
+4. assistant
+5. student
 
-# DB Initialization / updates
+"Teacher" means, more generally, any lecturer or presenter.
 
-createdb confrm_dev
-# migrate create db_repo "ConfRM Database Repository"
-migrate manage db_repo/manage.py --repository=db_repo --url=postgresql://localhost/confrm_dev
-python db_repo/manage.py version_control
-python db_repo/manage.py upgrade
+"Students" will not necessarily need to log in, but they can, to view past messages and course materials.
 
-# Amazon SES (for sending email) config
+## DB Initialization / updates
+
+  # dropdb confrm_dev
+	createdb confrm_dev
+	# migrate create db_repo "ConfRM Database Repository"
+	# migrate manage db_repo/manage.py --repository=db_repo --url=postgresql://localhost/confrm_dev
+	python db_repo/manage.py version_control
+	python db_repo/manage.py upgrade
+
+## Amazon SES Config
+
+The app uses Amazon (AWS) Simple Email Service to send email, and `boto` as the API driver. SES pricing, $0.10 per thousand emails, isn't bad, I'd say---because `postfix` is a pain to configure.
 
 Put the following in /etc/boto.cfg
 
     [Credentials]
-    aws_access_key_id=<your_key>
-    aws_secret_access_key=<your_secret_key>
+    aws_access_key_id=SAKSAUI21AS98213AWE8
+    aws_secret_access_key=AAKSD9aLPOi898LASOWI7naLA8an2NEW7cn9ALHE
 
 Or make them env variables:
 
     export AWS_ACCESS_KEY_ID=SAKSAUI21AS98213AWE8
     export AWS_SECRET_ACCESS_KEY=AAKSD9aLPOi898LASOWI7naLA8an2NEW7cn9ALHE
 
-# Migration examples:
+## Migration examples:
 
     003_Add_role_to_user.py
     # up:
@@ -85,3 +86,16 @@ Or make them env variables:
     events = Table('events', meta, autoload=True)
     for fk in fks(users, users) + fks(events, users):
         fk.drop()
+
+# To-do:
+
+1. Create dashboard page:
+	1. For superusers, this won't be much. They can do everything, so they don't have anything special to do.
+	2. For teachers, it would allow uploads and emails.
+	3. For students, it would be basically emails they've been sent and files they have access to.
+2. Elegant handling of resources and permissions.
+	1. Each action should be decorated with a list of (view|modify, resource) pairs, or run some `assert_permission(self.user, 'modify', resource)` method in the action.
+	2. Every `assert_permission(self.user, 'modify', x)` entry should raise an exception if the method is not POST or PUT, to beat XSS attacks.
+6. Allow users to have some per-organization preferences, versus global info.
+This is not a big issue, since most deploys will be 1-organization. But you can stick that stuff on the organizations_users many2many relationship. (Question: What user info _is_ per-organization?)
+7. Outgoing emails should always be recorded ("broadcasts"?), attached to an group.

@@ -1,5 +1,5 @@
-from sqlalchemy import Table, Column, MetaData, text, \
-    Integer, Unicode, ForeignKey, DateTime
+from mixins import load
+from sqlalchemy import Table, Column, MetaData, text, Integer, Unicode, ForeignKey, DateTime
 meta = MetaData()
 
 user_sessions = Table(
@@ -17,7 +17,7 @@ user_sessions = Table(
 
 def upgrade(migrate_engine):
     meta.bind = migrate_engine
-    Table('users', meta, autoload=True, autoload_with=migrate_engine)
+    load(meta, migrate_engine, 'users')
     user_sessions.create()
 
 

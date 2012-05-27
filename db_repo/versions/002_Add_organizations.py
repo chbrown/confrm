@@ -1,5 +1,5 @@
-from sqlalchemy import Table, Column, MetaData, text, \
-    Integer, Unicode, UnicodeText, DateTime
+from mixins import mixin_tags_json
+from sqlalchemy import Table, Column, MetaData, text, Integer, Unicode, DateTime
 meta = MetaData()
 
 # simple enumeration type
@@ -9,11 +9,9 @@ organizations = Table(
     Column('slug', Unicode, nullable=False),
     Column('name', Unicode, nullable=False),
 
-    Column('tags', Unicode),
-    Column('json', UnicodeText),
-
     Column('created', DateTime, server_default=text('NOW()')),
 )
+mixin_tags_json(organizations)
 
 
 def upgrade(migrate_engine):

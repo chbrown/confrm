@@ -1,5 +1,5 @@
-from sqlalchemy import Table, Column, ForeignKey, MetaData, text, \
-    Integer, Unicode, UnicodeText, DateTime, Boolean
+from mixins import mixin_tags_json, mixin_cad, load
+from sqlalchemy import Table, Column, MetaData, Integer, Unicode, Boolean
 meta = MetaData()
 
 users = Table(
@@ -21,22 +21,14 @@ users = Table(
     Column('url', Unicode),
     Column('photo', Unicode),
     Column('biography', Unicode),
-
-    Column('tags', Unicode),
-    Column('json', UnicodeText),
-
-    Column('created', DateTime, server_default=text('NOW()')),
-    Column('created_by_id', Integer, ForeignKey('users.id')),
-    Column('archived', DateTime),
-    Column('archived_by_id', Integer, ForeignKey('users.id')),
-    Column('deleted', DateTime),
-    Column('deleted_by_id', Integer, ForeignKey('users.id'))
 )
+mixin_tags_json(users)
+mixin_cad(users)
 
 
 def upgrade(migrate_engine):
     meta.bind = migrate_engine
-    Table('roles', meta, autoload=True, autoload_with=migrate_engine)
+    load(meta, migrate_engine, 'roles', 'users')
     users.create()
 
 

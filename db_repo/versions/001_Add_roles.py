@@ -1,5 +1,4 @@
-from sqlalchemy import Table, Column, MetaData, text, \
-    Integer, Unicode, DateTime
+from sqlalchemy import Table, Column, MetaData, text, Integer, Unicode, DateTime
 meta = MetaData()
 
 # simple enumeration type
