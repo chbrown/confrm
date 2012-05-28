@@ -7,7 +7,7 @@
     <th>First name</th>
     <th>Middle name</th>
     <th>Last name</th>
-    <th>Other Emails</th>
+    <th>All Emails</th>
     <th>Tags</th>
     <!-- <th>Role</th> -->
     <th>Classification</th>
@@ -15,6 +15,7 @@
     <th>Department</th>
     <th>International</th>
     <th>Notes</th>
+    <th>Root</th>
     <th>Created</th>
     <th>Archived</th>
     <th>Deleted</th>
@@ -25,14 +26,14 @@
     <td>${user.first_name or ''}</td>
     <td>${user.middle_name or ''}</td>
     <td>${user.last_name or ''}</td>
-    <td>${user.other_emails or ''}</td>
+    <td>${user.all_emails or ''}</td>
     <td>${user.tags or ''}</td>
-    <!-- <td>{user.role.name}</td> -->
     <td>${user.classification or ''}</td>
     <td>${user.institution or ''}</td>
     <td>${user.department or ''}</td>
     <td>${user.international or ''}</td>
     <td>${user.notes or ''}</td>
+    <td>${user.root or ''}</td>
     <td class="nowrap">${user.created.strftime('%Y-%m-%d')}</td>
     <td class="nowrap">
       % if user.archived:

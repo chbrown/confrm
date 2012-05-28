@@ -16,20 +16,6 @@ It's intended to be a sort of mini-BlackBoard. Except not violating every conven
 	python setup.py develop
 	pserve --reload development.ini
 
-## Roles
-
-There are five levels of roles, which are bootstrapped into the database, but which are hard-coded, in a way, by using their names in the app:
-
-1. superuser
-2. admin
-3. teacher
-4. assistant
-5. student
-
-"Teacher" means, more generally, any lecturer or presenter.
-
-"Students" will not necessarily need to log in, but they can, to view past messages and course materials.
-
 ## DB Initialization / updates
 
   # dropdb confrm_dev

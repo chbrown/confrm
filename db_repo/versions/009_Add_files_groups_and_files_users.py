@@ -1,5 +1,5 @@
 from mixins import load
-from sqlalchemy import Table, Column, MetaData, Integer, Boolean, ForeignKey
+from sqlalchemy import Table, Column, MetaData, Integer, ForeignKey, Boolean, text
 meta = MetaData()
 
 files_groups = Table(
@@ -7,7 +7,7 @@ files_groups = Table(
     Column('id', Integer, primary_key=True),
     Column('file_id', Integer, ForeignKey('files.id'), nullable=False),
     Column('group_id', Integer, ForeignKey('groups.id'), nullable=False),
-    Column('owns', Boolean, default=False),
+    Column('owner', Boolean, server_default=text('FALSE'), nullable=False),
 )
 
 files_users = Table(
@@ -15,7 +15,7 @@ files_users = Table(
     Column('id', Integer, primary_key=True),
     Column('file_id', Integer, ForeignKey('files.id'), nullable=False),
     Column('user_id', Integer, ForeignKey('users.id'), nullable=False),
-    Column('owns', Boolean, default=False),
+    Column('owner', Boolean, server_default=text('TRUE'), nullable=False),
 )
 
 def upgrade(migrate_engine):

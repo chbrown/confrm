@@ -1,5 +1,5 @@
 from mixins import mixin_tags_json, mixin_cad, load
-from sqlalchemy import Table, Column, MetaData, Integer, Unicode, Boolean
+from sqlalchemy import Table, Column, MetaData, Integer, Unicode, Boolean, text
 meta = MetaData()
 
 users = Table(
@@ -10,7 +10,7 @@ users = Table(
     Column('first_name', Unicode),
     Column('middle_name', Unicode),
     Column('last_name', Unicode),
-    Column('other_emails', Unicode),
+    Column('all_emails', Unicode),
 
     Column('classification', Unicode),
     Column('institution', Unicode),
@@ -21,6 +21,8 @@ users = Table(
     Column('url', Unicode),
     Column('photo', Unicode),
     Column('biography', Unicode),
+
+    Column('root', Boolean, server_default=text('FALSE'), nullable=False),
 )
 mixin_tags_json(users)
 mixin_cad(users)
@@ -28,7 +30,7 @@ mixin_cad(users)
 
 def upgrade(migrate_engine):
     meta.bind = migrate_engine
-    load(meta, migrate_engine, 'roles', 'users')
+    load(meta, migrate_engine, 'users')
     users.create()
 
 

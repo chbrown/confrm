@@ -14,7 +14,7 @@ var fields = [
   {key: 'first_name', type: 'text'},
   {key: 'middle_name', type: 'text'},
   {key: 'last_name', type: 'text'},
-  {key: 'other_emails', type: 'csv'},
+  {key: 'all_emails', type: 'csv'},
   {key: 'tags', type: 'csv'},
 
   {key: 'classification', type: 'text'},

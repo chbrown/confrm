@@ -14,7 +14,6 @@ DeclarativeBase = declarative_base(metadata=metadata)
 #     deleted_by  = relationship('User', primaryjoin=__table__.c.deleted_by_id==users.c.id)
 
 
-from role import Role
 from organization import Organization, OrganizationUser
 from group import Group, GroupUser
 from user import User, UserSession

@@ -27,7 +27,7 @@ metadata.bind = engine
 from confrm.models import Organization, User, OrganizationUser, Role
 
 if 'email' in argd:
-    user = User(email=argd['email'], password=hash_password(argd['password']))
+    user = User(email=argd['email'], password=hash_password(argd['password']), root=True)
     DBSession.add(user)
     DBSession.flush()
     print 'Added email'
@@ -39,8 +39,7 @@ if 'slug' in argd:
     print 'Added organization'
 
 if 'email' in argd and 'slug' in argd:
-    role = DBSession.query(Role).filter(Role.name==u'superuser').first()
-    org_user = OrganizationUser(user_id=user.id, organization_id=org.id, role_id=role.id, owns=True)
+    org_user = OrganizationUser(user_id=user.id, organization_id=org.id, access='w')
     DBSession.add(org_user)
     DBSession.flush()
     print 'Added user to organization'
