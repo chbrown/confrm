@@ -17,7 +17,7 @@
       <div class="controls">
         % for event_user in event_users:
         <label class="checkbox">
-          <input type="checkbox" name="to" value="${user.id}"> ${event_user.user.full_email} (${event_user.role.name})
+          <input type="checkbox" name="to" value="${user.id}"> ${event_user.user.full_email}
         </label>
         % endfor
       </div>

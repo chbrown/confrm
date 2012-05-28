@@ -5,14 +5,19 @@ from confrm.handlers import BaseHandler
 from confrm.models import DBSession, File, FileGroup, GroupUser, FileUser
 
 class FileHandler(BaseHandler):
-    base = 'files'
+    def __route__(self, args):
+        self.path = ['files', args[0]]
+        getattr(self, args[0])(*args[1:])
 
     def index(self, *args):
         group_files = DBSession.query(File).\
+            filter(File.deleted==None).\
             join(FileGroup, File.id==FileGroup.file_id).\
             join(GroupUser, FileGroup.group_id==GroupUser.group_id).\
             filter(GroupUser.user_id==self.user.id).all()
-        user_files = DBSession.query(File).join(FileUser).filter(FileUser.user_id==self.user.id).all()
+        user_files = DBSession.query(File).\
+            filter(File.deleted==None).\
+            join(FileUser, FileUser.user_id==self.user.id).all()
         # filenames = os.listdir(self.localdir)
         self.ctx.group_files = group_files
         self.ctx.user_files = user_files

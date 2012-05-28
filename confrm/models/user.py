@@ -1,6 +1,6 @@
 from sqlalchemy.orm import relationship
 from confrm.models import DeclarativeBase
-from confrm.models.tables import users, user_sessions
+from confrm.models.tables import users, user_sessions, groups_users
 # from confrm.models.group import GroupUser
 
 class UserSchema(DeclarativeBase):
@@ -8,6 +8,8 @@ class UserSchema(DeclarativeBase):
     created_by  = relationship('User', primaryjoin=__table__.c.created_by_id==users.c.id)
     deleted_by  = relationship('User', primaryjoin=__table__.c.deleted_by_id==users.c.id)
     archived_by = relationship('User', primaryjoin=__table__.c.archived_by_id==users.c.id)
+
+    groups = relationship('Group', secondary=groups_users, backref="users")
 
 class UserSession(DeclarativeBase):
     __table__ = user_sessions

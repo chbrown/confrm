@@ -8,11 +8,16 @@ from confrm.models import DBSession, UserSession
 def error404(request):
     return HTTPFound(location='/users/index')
 
+class NotAuthorized(Exception):
+    pass
+
+class UnauthorizedHTTPMethod(Exception):
+    pass
+
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
         dict.__init__(self, *args, **kwargs)
         self.__dict__ = self
-
 
 class BaseHandler(object):
     ctx = None
@@ -21,14 +26,15 @@ class BaseHandler(object):
     def __init__(self, request):
         self.request = request
         self.ctx = AttrDict()
-        self.__route__(request)
 
-    def __route__(self, request):
-        args = request.matchdict['args']
+        args = list(request.matchdict['args'])
         self.path = [self.base, args[0]]
         if args[-1].endswith('.json'):
             self.format == 'json'
             args[-1] = args[-1].replace('.json', '')
+        self.__route__(args)
+
+    def __route__(self, args):
         getattr(self, args[0])(*args[1:])
 
     def __json__(self):
@@ -61,9 +67,10 @@ class BaseHandler(object):
         raise HTTPFound(location='/user_sessions/new?flash=Please+sign+in+first.')
 
     def can_view(self, resource):
-        return resource.viewable_by(self.user)
+        if not resource.viewable_by(self.user):
+            raise NotAuthorized('Cannot view %s' % resource)
 
     def can_modify(self, resource):
         if self.request.method not in ['POST', 'PUT', 'DELETE']:
-            raise Exception('Cannot make modification unless using POST, PUT, or DELETE.')
+            raise UnauthorizedHTTPMethod('Cannot make modification unless using POST, PUT, or DELETE.')
         return resource.modifiable_by(self.user)

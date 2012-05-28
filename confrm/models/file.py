@@ -21,14 +21,17 @@ class File(DeclarativeBase):
             os.mkdir(dirpath)
         return dirpath
 
-    def read(self, fp):
-        # print 'self.filename', self.filename
-        # assert 0, self
+    @property
+    def safe_filename(self):
         safe_filename = re.sub(r'/|\\', '', self.filename)
-        safe_filename = re.sub(r'\.+', '.', safe_filename)
-        filepath = os.path.join(self.directory, safe_filename)
-        # print 'reading file to', filepath
-        with open(filepath, 'wb') as local_fp:
+        return re.sub(r'\.+', '.', safe_filename)
+
+    @property
+    def filepath(self):
+        return '%s/%d-%s' % (self.directory, self.id, self.safe_filename)
+
+    def read(self, fp):
+        with open(self.filepath, 'wb') as local_fp:
             file_contents = fp.read()
             file_size = len(file_contents)
             local_fp.write(file_contents)
@@ -50,3 +53,6 @@ class File(DeclarativeBase):
             if file_group:
                 return True
         return False
+
+    def __json__(self):
+        return dict(filename=self.filename, safe_filename=self.safe_filename)

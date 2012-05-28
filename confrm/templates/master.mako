@@ -28,8 +28,22 @@
   ${next.body()}
 </div>
 <script>
-  $('.tablesorter').tablesorter();
-  var flash = window.location.search.match(/[?&]flash=([^?&]+)/);
-  if (flash)
-    $('#navbar h2').flag({text: flash[1].replace(/\+/g, ' ')});
+$('.tablesorter').tablesorter();
+var flash = window.location.search.match(/[?&]flash=([^?&]+)/);
+if (flash)
+  $('#navbar h2').flag({text: flash[1].replace(/\+/g, ' ')});
+$('a[data-method=DELETE]').click(function(ev) {
+  ev.preventDefault();
+  var $a = $(this);
+  $.ajax($a.attr('href'), {
+    type: 'DELETE',
+    success: function(data, textStatus, jqXHR) {
+      $a.flag({text: data.message});
+      // if (data.success)
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      $a.flag({text: 'Connection failed: ' + textStatus});
+    }
+  });
+});
 </script>

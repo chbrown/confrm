@@ -14,14 +14,16 @@ class UserHandler(BaseHandler):
     3b. On that page, they can set mappings, functions, cleaners, etc.
     4.  Their settings are saved as an "upload_filter," and they go to /uploads/show?filename=abcdef.xls, to preview the way their data will look like after their filter is applied, resulting in how my app will show it.
     """
-    base = 'users'
+    def __route__(self, args):
+        self.path = ['users', args[0]]
+        getattr(self, args[0])(*args[1:])
 
     def index(self):
         users = DBSession.query(User).all()
         self.ctx.users = users
 
     def new_from_file(self, file_id):
-        self.can('')
+        # self.can('')
         # file_id = self.request.GET['file_id']
         new_file = DBSession.query(File).get(file_id)
         with open(new_file.filepath) as fp:

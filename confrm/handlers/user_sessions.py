@@ -4,7 +4,9 @@ from confrm.models.user import User, UserSession
 from confrm.lib import hash_password, random_ticket
 
 class UserSessionHandler(BaseHandler):
-    base = 'user_sessions'
+    def __route__(self, args):
+        self.path = ['user_sessions', args[0]]
+        getattr(self, args[0])(*args[1:])
 
     def new(self):
         pass

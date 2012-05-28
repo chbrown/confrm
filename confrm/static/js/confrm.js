@@ -52,12 +52,12 @@ Widgets.bool.prototype.get = function() {
 
 Widgets.csv = function() {};
 Widgets.csv.prototype.init = function($container, field, value) {
-  this.help += '<br/>Separate with commas. Spaces and underscores will be merged and converted to hyphens.';
   var input_html = '<input type="text" class="input-xlarge" id="' + field.key + '" value="' + (value || '') + '">';
   this.$input = $(input_html).appendTo($container);
   this.$input.on('change', function() {
     var raw = $(this).val();
-    var parts = raw.replace(/[ _]+/g, '-').split(',');
+    var parts = raw.replace(/[- _]+/g, '-').split(',');
+    parts = parts.map(function(part) { return part.replace(/^-|-$/g, ''); });
     $(this).val(parts.join(', '));
   });
 };
@@ -69,8 +69,10 @@ Widgets.radiolist = function() {};
 Widgets.radiolist.prototype.init = function($container, field, value) {
   this.$container = $container;
   field.children.map(function(option, i) {
-    $container.append('<label class="checkbox"><input type="radio" value="' + option + '"> ' + option + '</label> ');
+    $container.append('<label class="radio"><input type="radio" name="' + field.key + '" value="' + option + '"> ' + auto(option) + '</label> ');
   });
+  if (field.default)
+    $container.find('input[value="' + field.default + '"]').prop('checked', true);
 };
 Widgets.radiolist.prototype.get = function() {
   return this.$container.find('input:checked').val();

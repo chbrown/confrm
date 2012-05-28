@@ -3,16 +3,15 @@ from confrm.handlers import BaseHandler
 from confrm.models import DBSession, User, Group, GroupUser
 
 class GroupHandler(BaseHandler):
-    base = 'groups'
-
-    def __route__(self, request):
-        args = request.matchdict['args']
-        self.path = [self.base, args[0]]
+    def __route__(self, args):
+        self.path = ['groups', args[0]]
         getattr(self, args[0])(*args[1:])
 
     def index(self):
-        groups = DBSession.query(Group).all()
-        self.ctx.groups = groups
+        if self.user.root:
+            self.ctx.groups = DBSession.query(Group).all()
+        else:
+            self.ctx.groups = self.user.groups
 
     def new(self):
         pass

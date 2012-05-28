@@ -55,13 +55,13 @@ var fields = [
   {
     key: 'tags',
     type: 'csv',
-    help: 'What tags should be applied to each user below?',
+    help: 'What tags should be applied to each user below?<br/>Separate with commas. Spaces and underscores will be merged and converted to hyphens.',
   },
   {
     key: 'add_replace_tags',
     type: 'radiolist',
     children: ['add', 'replace'],
-    default: ['add'],
+    default: 'add',
     help: 'Add or replace tags, if user already exists?',
   },
   {
@@ -77,11 +77,11 @@ var fields = [
     key: 'add_replace_groups',
     type: 'radiolist',
     children: ['add', 'replace'],
-    default: ['add'],
+    default: 'add',
     help: 'Add or replace groups, if user already exists?',
   },
 ];
-var form = new Form($('.form-horizontal fieldset'), fields, values);
+var form = new Form($('.form-horizontal fieldset'), fields, {});
 
 function getUsers() {
   var headers = $('table thead th').map(function(i, th) {
