@@ -1,5 +1,5 @@
 from sqlalchemy.orm import relationship
-from confrm.models import DeclarativeBase, DBSession
+from confrm.models import DeclarativeBase
 from confrm.models.tables import users, user_sessions
 # from confrm.models.group import GroupUser
 
@@ -14,9 +14,6 @@ class UserSession(DeclarativeBase):
     user = relationship('User', primaryjoin=__table__.c.user_id==users.c.id)
 
 class User(UserSchema):
-    # def group_role(self, group_id):
-        # return DBSession.query(GroupUser).filter(GroupUser.group_id==group_id).filter(GroupUser.user_id==self.id).first()
-
     def writeable_by(self, user):
         return self.root or self.id == user.id
 

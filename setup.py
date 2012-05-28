@@ -18,6 +18,7 @@ requires = [
     'xlrd',
     'openpyxl',
     'boto',
+    'python-memcached',
     ]
 
 setup(name='confrm',

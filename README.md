@@ -25,7 +25,9 @@ It's intended to be a sort of mini-BlackBoard. Except not violating every conven
 	python db_repo/manage.py version_control
 	python db_repo/manage.py upgrade
 
+  # Get started with a root user, at the CLI:
   python confrm/scripts/add.py development.ini --email audiere@gmail.com --password needle --slug nasslli2012 --name "NASSLLI 2012"
+  
 ## Amazon SES Config
 
 The app uses Amazon (AWS) Simple Email Service to send email, and `boto` as the API driver. SES pricing, $0.10 per thousand emails, isn't bad, I'd say---because `postfix` is a pain to configure.

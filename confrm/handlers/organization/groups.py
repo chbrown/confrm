@@ -1,8 +1,6 @@
 import boto
 from confrm.handlers import BaseHandler
-from confrm.models import DBSession
-from confrm.models.user import User, GroupUser
-from confrm.models.group import Group
+from confrm.models import DBSession, User, Group, GroupUser
 
 class GroupHandler(BaseHandler):
     base = 'groups'

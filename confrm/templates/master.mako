@@ -19,7 +19,7 @@
   % endif
   <!-- <i class="icon-home"></i> -->
   <a href="/users/index" class="btn"><i class="icon-user"></i> Users</a>
-  <a href="/files/index" class="btn"><i class="icon-plus"></i> Files</a>
+  <a href="/files/index" class="btn"><i class="icon-file"></i> Files</a>
   % if organization:
     <a href="/{organization.slug}/groups/index" class="btn"><i class="icon-calendar"></i> Groups</a>
   % endif

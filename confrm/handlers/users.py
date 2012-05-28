@@ -2,7 +2,7 @@ import sqlalchemy.exc
 from confrm.lib import parse_request
 from confrm.lib.table import read_table, guess_headers
 from confrm.handlers import BaseHandler
-from confrm.models import DBSession, User, File, Role, Group
+from confrm.models import DBSession, User, File, Group
 
 class UserHandler(BaseHandler):
     """
@@ -32,16 +32,13 @@ class UserHandler(BaseHandler):
         params = parse_request(self.request)
 
         tag_csv = ','.join(params['tags'])
-        role = DBSession.query(Role).filter(Role.name==params['role']).first()
         group = DBSession.query(Group).filter(Group.id==params['group_id']).first()
         for user_dict in params['users']:
             new_user = User(**user_dict)
             if tag_csv:
                 new_user.tags = tag_csv
-            if role:
-                new_user.role_id = role.id
             if group:
-                new_user.group_id = role.id
+                new_user.group_id = group.id
             try:
                 DBSession.begin_nested()
                 DBSession.add(new_user)

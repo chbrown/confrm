@@ -26,11 +26,11 @@ class FileHandler(BaseHandler):
         new_file = File(filename=upload.filename)
         DBSession.add(new_file)
         DBSession.flush()
-        file_user = FileUser(user_id=self.user.id, file_id=new_file.id, owns=True)
+        file_user = FileUser(user_id=self.user.id, file_id=new_file.id, owner=True)
         DBSession.add(file_user)
         group_id = self.request.POST.get('group_id')
         if group_id:
-            file_group = FileGroup(group_id=group_id, file_id=new_file.id, owns=False)
+            file_group = FileGroup(group_id=group_id, file_id=new_file.id, owner=False)
             DBSession.add(file_group)
         DBSession.flush()
 

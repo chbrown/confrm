@@ -9,7 +9,6 @@
     <th>Last name</th>
     <th>All Emails</th>
     <th>Tags</th>
-    <!-- <th>Role</th> -->
     <th>Classification</th>
     <th>Institution</th>
     <th>Department</th>

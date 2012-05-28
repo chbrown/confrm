@@ -24,7 +24,7 @@ engine = engine_from_config(app_config)
 DBSession.configure(bind=engine)
 metadata.bind = engine
 
-from confrm.models import Organization, User, OrganizationUser, Role
+from confrm.models import Organization, User, OrganizationUser
 
 if 'email' in argd:
     user = User(email=argd['email'], password=hash_password(argd['password']), root=True)
@@ -39,7 +39,7 @@ if 'slug' in argd:
     print 'Added organization'
 
 if 'email' in argd and 'slug' in argd:
-    org_user = OrganizationUser(user_id=user.id, organization_id=org.id, access='w')
+    org_user = OrganizationUser(user_id=user.id, organization_id=org.id, owner=True)
     DBSession.add(org_user)
     DBSession.flush()
     print 'Added user to organization'

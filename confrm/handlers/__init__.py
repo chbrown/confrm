@@ -26,6 +26,9 @@ class BaseHandler(object):
     def __route__(self, request):
         args = request.matchdict['args']
         self.path = [self.base, args[0]]
+        if args[-1].endswith('.json'):
+            self.format == 'json'
+            args[-1] = args[-1].replace('.json', '')
         getattr(self, args[0])(*args[1:])
 
     def __json__(self):

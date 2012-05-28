@@ -13,11 +13,11 @@
       </div>
     </div>
     <div class="control-group">
-      <label class="control-label" for="role">To</label>
+      <label class="control-label" for="to">To</label>
       <div class="controls">
         % for event_user in event_users:
         <label class="checkbox">
-          <input type="checkbox" name="options" value="${user.id}"> ${event_user.user.full_email} (${event_user.role.name})
+          <input type="checkbox" name="to" value="${user.id}"> ${event_user.user.full_email} (${event_user.role.name})
         </label>
         % endfor
       </div>

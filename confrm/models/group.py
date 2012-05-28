@@ -21,6 +21,6 @@ class Group(DeclarativeBase):
 
         group_user = DBSession.query(GroupUser).\
             filter(GroupUser.user_id==user.id).\
-            filter(GroupUser.owns==True).first()
+            filter(GroupUser.owner==True).first()
         if group_user:
             return True
