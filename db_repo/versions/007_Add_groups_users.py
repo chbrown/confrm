@@ -1,5 +1,5 @@
 from mixins import mixin_cad, load
-from sqlalchemy import Table, Column, MetaData, ForeignKey, Integer
+from sqlalchemy import Table, Column, MetaData, ForeignKey, Integer, Boolean
 meta = MetaData()
 
 groups_users = Table(
@@ -8,6 +8,7 @@ groups_users = Table(
     Column('group_id', Integer, ForeignKey('groups.id'), nullable=False),
     Column('user_id', Integer, ForeignKey('users.id'), nullable=False),
     Column('role_id', Integer, ForeignKey('roles.id')),
+    Column('owns', Boolean, default=False),
 )
 mixin_cad(groups_users)
 

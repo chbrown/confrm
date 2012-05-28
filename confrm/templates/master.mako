@@ -10,6 +10,7 @@
 <script src="/static/js/jquery.flags.js"></script>
 <script src="/static/js/jquery.tablesorter.js"></script>
 <script src="/static/js/date.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
 <script src="/static/js/confrm.js"></script>
 <div id="navbar">
   <h2>ConfRM</h2>
@@ -19,7 +20,9 @@
   <!-- <i class="icon-home"></i> -->
   <a href="/users/index" class="btn"><i class="icon-user"></i> Users</a>
   <a href="/files/index" class="btn"><i class="icon-plus"></i> Files</a>
-  <a href="/groups/index" class="btn"><i class="icon-calendar"></i> Groups</a>
+  % if organization:
+    <a href="/{organization.slug}/groups/index" class="btn"><i class="icon-calendar"></i> Groups</a>
+  % endif
 </div>
 <div class="container">
   ${next.body()}
@@ -28,5 +31,5 @@
   $('.tablesorter').tablesorter();
   var flash = window.location.search.match(/[?&]flash=([^?&]+)/);
   if (flash)
-    $('#navbar h2').flag({text: flash[1]});
+    $('#navbar h2').flag({text: flash[1].replace(/\+/g, ' ')});
 </script>

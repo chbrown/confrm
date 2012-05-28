@@ -1,16 +1,16 @@
-from pyramid.session import UnencryptedCookieSessionFactoryConfig
+# from pyramid.session import UnencryptedCookieSessionFactoryConfig
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 
 from confrm.session import DBSession, metadata
-session_factory = UnencryptedCookieSessionFactoryConfig('PZbjJ5U3phGt')
+# session_factory = UnencryptedCookieSessionFactoryConfig('PZbjJ5U3phGt')
 
 def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     metadata.bind = engine
 
-    config = Configurator(settings=settings, session_factory=session_factory)
+    config = Configurator(settings=settings)
     config.add_static_view('static', path='static/', cache_max_age=1)
 
     # User

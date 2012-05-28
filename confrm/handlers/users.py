@@ -53,3 +53,22 @@ class UserHandler(BaseHandler):
                 user = DBSession.query(User).filter(User.email==user_dict['email']).first()
                 user.merge(new_user)
                 DBSession.flush()
+
+    def edit(self, user_id):
+        self.ctx.user = DBSession.query(User).get(user_id)
+        # print self.ctx.user_object
+
+    def update(self, user_id):
+        user = DBSession.query(User).get(user_id)
+        assert self.can_modify(user)
+
+        params = parse_request(self.request)
+        print params.items()
+        for key, value in params.items():
+            setattr(user, key, value)
+
+        DBSession.add(user)
+        DBSession.flush()
+
+        self.ctx.success = True
+        self.ctx.message = 'Updated user.'

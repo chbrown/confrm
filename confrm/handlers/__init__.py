@@ -1,21 +1,12 @@
-import json
 from mako.exceptions import TopLevelLookupException
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.httpexceptions import HTTPFound  # HTTPNotFound, HTTPUnauthorized
+from confrm.lib import jsonize
 from confrm.models import DBSession, UserSession
 
 def error404(request):
     return HTTPFound(location='/users/index')
-
-class CustomEncoder(json.JSONEncoder):
-    def default(self, obj):
-        custom_json_function = getattr(obj, '__json__', None)
-        if custom_json_function:
-            return custom_json_function()
-        return super(CustomEncoder, self).default(self, obj)
-
-custom_encoder = CustomEncoder()
 
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
@@ -38,7 +29,7 @@ class BaseHandler(object):
         getattr(self, args[0])(*args[1:])
 
     def __json__(self):
-        json_string = custom_encoder.encode(self.ctx)
+        json_string = jsonize(self.ctx)
         return Response(json_string, content_type='application/json')
 
     def __call__(self):
@@ -60,16 +51,16 @@ class BaseHandler(object):
 
     @property
     def user(self):
-        ticket = self.request.session.get('ticket')
+        ticket = self.request.cookies.get('ticket')
         user_session = DBSession.query(UserSession).filter(UserSession.ticket==ticket).first()
         if user_session:
             return user_session.user
-        raise HTTPFound(location='/user_sessions/new?flash="Please sign in first."')
+        raise HTTPFound(location='/user_sessions/new?flash=Please+sign+in+first.')
 
     def can_view(self, resource):
-        self.user.can
-        pass
+        return resource.viewable_by(self.user)
 
     def can_modify(self, resource):
-        if self.request.method not in ['POST', 'PUT']:
-            raise Exception('Cannot make modification unless using POST or PUT.')
+        if self.request.method not in ['POST', 'PUT', 'DELETE']:
+            raise Exception('Cannot make modification unless using POST, PUT, or DELETE.')
+        return resource.modifiable_by(self.user)

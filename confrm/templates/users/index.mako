@@ -9,7 +9,7 @@
     <th>Last name</th>
     <th>Other Emails</th>
     <th>Tags</th>
-    <th>Role</th>
+    <!-- <th>Role</th> -->
     <th>Classification</th>
     <th>Institution</th>
     <th>Department</th>
@@ -21,13 +21,13 @@
   </tr>
 % for user in users:
   <tr>
-    <td>${user.email}</td>
-    <td>${user.first_name}</td>
+    <td><a href="/users/edit/${user.id}">${user.email}</a></td>
+    <td>${user.first_name or ''}</td>
     <td>${user.middle_name or ''}</td>
-    <td>${user.last_name}</td>
+    <td>${user.last_name or ''}</td>
     <td>${user.other_emails or ''}</td>
     <td>${user.tags or ''}</td>
-    <td>${user.role.name}</td>
+    <!-- <td>{user.role.name}</td> -->
     <td>${user.classification or ''}</td>
     <td>${user.institution or ''}</td>
     <td>${user.department or ''}</td>

@@ -40,7 +40,7 @@ if 'slug' in argd:
 
 if 'email' in argd and 'slug' in argd:
     role = DBSession.query(Role).filter(Role.name==u'superuser').first()
-    org_user = OrganizationUser(user_id=user.id, organization_id=org.id, role_id=role.id)
+    org_user = OrganizationUser(user_id=user.id, organization_id=org.id, role_id=role.id, owns=True)
     DBSession.add(org_user)
     DBSession.flush()
     print 'Added user to organization'

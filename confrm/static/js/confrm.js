@@ -1,47 +1,59 @@
-/*!
- * jQuery Cookie Plugin
- * https://github.com/carhartl/jquery-cookie
- *
- * Copyright 2011, Klaus Hartl
- * Dual licensed under the MIT or GPL Version 2 licenses.
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.opensource.org/licenses/GPL-2.0
- */
-(function($) {
-    $.cookie = function(key, value, options) {
+function auto(string) {
+  return string.replace(/_/g, ' ').split(/\s+/).map(function(part) {
+    return part[0].toUpperCase() + part.slice(1);
+  }).join(' ');
+}
 
-        // key and at least value given, set cookie...
-        if (arguments.length > 1 && (!/Object/.test(Object.prototype.toString.call(value)) || value === null || value === undefined)) {
-            options = $.extend({}, options);
+function Form($form, fields, values) {
+  this.widgets = fields.map(function(field) {
+    var value = values[field.key];
+    var $controls = bootstrapWrapper($form, field);
+    var widget = new Widgets[field.type]();
+    widget.field = field;
+    widget.init($controls, field, value);
+    return widget;
+  });
+}
+Form.prototype.get = function() {
+  var values = {};
+  this.widgets.forEach(function(widget) {
+    values[widget.field.key] = widget.get();
+  });
+  return values;
+};
 
-            if (value === null || value === undefined) {
-                options.expires = -1;
-            }
+function bootstrapWrapper($container, field) {
+  var $group = $('<div class="control-group"></div>').appendTo($container);
+  $group.append('<label class="control-label" for="' + field.key + '">' + auto(field.key) + '</label>');
+  return $('<div class="controls"></div>').appendTo($group);
+  // if (field.help) {
+    // $controls.append('<p class="help-block">What tags should be applied to each user below?</p>');
+  // }
+}
 
-            if (typeof options.expires === 'number') {
-                var days = options.expires, t = options.expires = new Date();
-                t.setDate(t.getDate() + days);
-            }
 
-            value = String(value);
+var Widgets = {};
+Widgets.text = function() {};
+Widgets.text.prototype.init = function($container, field, value) {
+  this.$input = $('<input type="text" id="' + field.key + '" value="' + (value || '') + '">').appendTo($container);
+};
+Widgets.text.prototype.get = function() {
+  return this.$input.val();
+};
 
-            return (document.cookie = [
-                encodeURIComponent(key), '=', options.raw ? value : encodeURIComponent(value),
-                options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-                options.path    ? '; path=' + options.path : '',
-                options.domain  ? '; domain=' + options.domain : '',
-                options.secure  ? '; secure' : ''
-            ].join(''));
-        }
+Widgets.bool = function() {};
+Widgets.bool.prototype.init = function($container, field, value) {
+  this.$input = $('<input type="checkbox" id="' + field.key + '" ' + (value ? 'checked="checked"' : '') + '>');
+  $('<label class="checkbox">' + (field.label || '') + '</label>').append(this.$input).appendTo($container);
+};
+Widgets.bool.prototype.get = function() {
+  return this.$input.prop('checked');
+};
 
-        // key and possibly options given, get cookie...
-        options = value || {};
-        var decode = options.raw ? function(s) { return s; } : decodeURIComponent;
-
-        var pairs = document.cookie.split('; ');
-        for (var i = 0, pair; pair = pairs[i] && pairs[i].split('='); i++) {
-            if (decode(pair[0]) === key) return decode(pair[1] || ''); // IE saves cookies with empty string as "c; ", e.g. without "=" as opposed to EOMB, thus pair[1] may be undefined
-        }
-        return null;
-    };
-})(jQuery);
+Widgets.csv = function() {};
+Widgets.csv.prototype.init = function($container, field, value) {
+  this.$input = $('<input type="text" id="' + field.key + '" value="' + (value || '') + '">').appendTo($container);
+};
+Widgets.csv.prototype.get = function() {
+  return this.$input.val();
+};

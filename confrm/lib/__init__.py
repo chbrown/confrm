@@ -1,3 +1,4 @@
+import json
 import random
 import hashlib
 
@@ -17,3 +18,14 @@ def parse_request(request):
 def update_attributes(obj, dictionary):
     for key, val in dictionary.items():
         setattr(obj, key, val)
+
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if hasattr(obj, '__json__'):
+            return obj.__json__()
+        return super(CustomEncoder, self).default(obj)
+
+custom_encoder = CustomEncoder()
+
+def jsonize(obj):
+    return custom_encoder.encode(obj)

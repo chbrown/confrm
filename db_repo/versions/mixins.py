@@ -14,8 +14,12 @@ def mixin_cad(table):
         table.append_column(column)
 
 def mixin_tags_json(table):
-    Column('tags', Unicode),
-    Column('json', UnicodeText),
+    columns = [
+        Column('tags', Unicode),
+        Column('json', UnicodeText),
+    ]
+    for column in columns:
+        table.append_column(column)
 
 def load(meta, engine, *tables):
     for table in tables:

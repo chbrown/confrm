@@ -5,8 +5,8 @@ meta = MetaData()
 files = Table(
     'files', meta,
     Column('id', Integer, primary_key=True),
+    # Column('name', Unicode, nullable=False),
     Column('filename', Unicode, nullable=False),
-    Column('filepath', Unicode, nullable=False),
 )
 mixin_tags_json(files)
 mixin_cad(files)

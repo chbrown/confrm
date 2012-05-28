@@ -1,7 +1,8 @@
 from sqlalchemy.orm import relationship
 from confrm.models import DeclarativeBase, DBSession
 from confrm.models.tables import users, user_sessions
-from confrm.models.group import Group, GroupUser
+from confrm.models.group import GroupUser
+# Group,
 # from confrm.models.role import Role
 
 class UserSchema(DeclarativeBase):
@@ -19,13 +20,11 @@ class User(UserSchema):
     def group_role(self, group_id):
         return DBSession.query(GroupUser).filter(GroupUser.group_id==group_id).filter(GroupUser.user_id==self.id).first()
 
-    def can_edit(self, resource):
-        if isinstance(resource, User):
-            return self.role in ['superuser', 'admin'] or self == resource
-        elif isinstance(resource, Group):
-            return self.group_role(resource.id) in ['superuser', 'admin', 'teacher']
-        else:
-            return False
+    def modifiable_by(self, user):
+        if self.id == user.id:
+            return True
+        if self.role in ['superuser', 'admin']:
+            return True
 
     @property
     def full_email(self):
@@ -44,3 +43,8 @@ class User(UserSchema):
             other_value = getattr(other_user, field, None)
             if other_value:
                 setattr(self, field, other_value)
+
+    def __json__(self):
+        fields = ['email', 'first_name', 'middle_name', 'last_name', 'other_emails', 'tags',
+            'classification', 'institution', 'department', 'international', 'notes']
+        return dict((field, getattr(self, field, None)) for field in fields)

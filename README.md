@@ -39,6 +39,7 @@ There are five levels of roles, which are bootstrapped into the database, but wh
 	python db_repo/manage.py version_control
 	python db_repo/manage.py upgrade
 
+  python confrm/scripts/add.py development.ini --email audiere@gmail.com --password needle --slug nasslli2012 --name "NASSLLI 2012"
 ## Amazon SES Config
 
 The app uses Amazon (AWS) Simple Email Service to send email, and `boto` as the API driver. SES pricing, $0.10 per thousand emails, isn't bad, I'd say---because `postfix` is a pain to configure.
@@ -100,5 +101,3 @@ Or make them env variables:
 6. Allow users to have some per-organization preferences, versus global info.
 This is not a big issue, since most deploys will be 1-organization. But you can stick that stuff on the organizations_users many2many relationship. (Question: What user info _is_ per-organization?)
 7. Outgoing emails should always be recorded ("broadcasts"?), attached to an group.
-
-python confrm/scripts/add.py development.ini --email audiere@gmail.com --password needle --slug nasslli2012 --name "NASSLLI 2012"

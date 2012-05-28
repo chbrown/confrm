@@ -18,7 +18,7 @@
 </div>
 
 <script>
-$('button[type=submit]').click(function() {
+function submit() {
   $.ajax('/user_sessions/create', {
     type: 'POST',
     data: {email: $('#email').val(), password: $('#password').val()},
@@ -26,12 +26,19 @@ $('button[type=submit]').click(function() {
     success: function(data, textStatus, jqXHR) {
       $('button[type=submit]').flag({text: data.message});
       if (data.success) {
-        $.cookie('ticket', data.ticket);
+        $.cookie('ticket', data.ticket, {expires: 31, path: '/'});
       }
     },
     error: function(jqXHR, textStatus, errorThrown) {
       $('button[type=submit]').flag({text: 'Connection failed: ' + textStatus});
     }
   });
+}
+$('button[type=submit]').click(submit);
+$('.form-vertical').on('keypress', function(ev) {
+  if (ev.keyCode === 13 && ev.target.type !== "textarea") {
+    submit();
+    ev.preventDefault();
+  }
 });
 </script>
