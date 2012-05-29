@@ -1,6 +1,7 @@
 import json
 import random
 import hashlib
+from datetime import datetime
 
 def hash_password(string):
     return hashlib.sha256(string).hexdigest()
@@ -23,6 +24,8 @@ class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
         if hasattr(obj, '__json__'):
             return obj.__json__()
+        elif isinstance(obj, datetime):
+            return obj.isoformat()
         return super(CustomEncoder, self).default(obj)
 
 custom_encoder = CustomEncoder()

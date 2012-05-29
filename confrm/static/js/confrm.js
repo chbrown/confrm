@@ -1,3 +1,30 @@
+function post(url, data, callback) {
+  if (callback === undefined && typeof data === 'function') {
+    callback = data;
+    data = undefined;
+  }
+  $.ajax(url, {
+    type: 'POST',
+    data: data,
+    dataType: 'json',
+    success: function(response, textStatus, jqXHR) {
+      callback(response);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      var response;
+      // console.log(jqXHR.status);
+      // jqXHR.status, jqXHR.statusText, jqXHR.responseText
+      try {
+        response = JSON.parse(jqXHR.responseText);
+      }
+      catch (exc) {
+        response = {success: false, message: 'Request failed: ' + jqXHR.statusText + ' (' + jqXHR.status + ')'};
+      }
+      callback(response);
+    }
+  });
+}
+
 function auto(string) {
   return string.replace(/_/g, ' ').split(/\s+/).map(function(part) {
     return part[0].toUpperCase() + part.slice(1);

@@ -4,15 +4,10 @@ from pyramid.renderers import render_to_response
 from pyramid.httpexceptions import HTTPFound  # HTTPNotFound, HTTPUnauthorized
 from confrm.lib import jsonize
 from confrm.models import DBSession, UserSession
+from confrm.exc import NotAuthorized, UnauthorizedHTTPMethod
 
 def error404(request):
     return HTTPFound(location='/users/index')
-
-class NotAuthorized(Exception):
-    pass
-
-class UnauthorizedHTTPMethod(Exception):
-    pass
 
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
@@ -20,7 +15,6 @@ class AttrDict(dict):
         self.__dict__ = self
 
 class BaseHandler(object):
-    ctx = None
     format = 'mako'
 
     def __init__(self, request):
@@ -28,7 +22,7 @@ class BaseHandler(object):
         self.ctx = AttrDict()
 
         args = list(request.matchdict['args'])
-        self.path = [self.base, args[0]]
+        # self.path = [self.base, args[0]]
         if args[-1].endswith('.json'):
             self.format == 'json'
             args[-1] = args[-1].replace('.json', '')
@@ -67,10 +61,15 @@ class BaseHandler(object):
         raise HTTPFound(location='/user_sessions/new?flash=Please+sign+in+first.')
 
     def can_view(self, resource):
+        if self.user.root:
+            return True
         if not resource.viewable_by(self.user):
             raise NotAuthorized('Cannot view %s' % resource)
 
     def can_modify(self, resource):
         if self.request.method not in ['POST', 'PUT', 'DELETE']:
             raise UnauthorizedHTTPMethod('Cannot make modification unless using POST, PUT, or DELETE.')
-        return resource.modifiable_by(self.user)
+        if self.user.root:
+            return True
+        if not resource.modifiable_by(self.user):
+            raise NotAuthorized('Cannot modify %s' % resource)

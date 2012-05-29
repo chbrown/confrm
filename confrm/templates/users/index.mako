@@ -40,7 +40,6 @@
       % else:
         <a href="/users/archive/${user.id}" class="btn btn-info btn-mini"><i class="icon-lock"></i> archive</a>
       % endif
-      ${user.deleted or ''}
     </td>
     <td class="nowrap">
       % if user.deleted:

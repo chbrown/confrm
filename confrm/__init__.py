@@ -20,10 +20,8 @@ def main(global_config, **settings):
     config.add_view('confrm.handlers.user_sessions.UserSessionHandler', route_name='user_sessions')
     config.add_route('files', '/files/*args')
     config.add_view('confrm.handlers.files.FileHandler', route_name='files')
-
-    # per-Org
-    config.add_route('groups', '/{organization}/groups/*args')
-    config.add_view('confrm.handlers.organization.groups.GroupHandler', route_name='groups')
+    config.add_route('groups', '/groups/*args')
+    config.add_view('confrm.handlers.groups.GroupHandler', route_name='groups')
 
     config.add_notfound_view('confrm.handlers.error404')
     config.add_route('root', '/')

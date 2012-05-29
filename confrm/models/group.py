@@ -16,11 +16,12 @@ class Group(DeclarativeBase):
     archived_by = relationship('User', primaryjoin=__table__.c.archived_by_id==users.c.id)
 
     def modifiable_by(self, user):
-        if self.root:
-            return True
-
         group_user = DBSession.query(GroupUser).\
             filter(GroupUser.user_id==user.id).\
             filter(GroupUser.owner==True).first()
         if group_user:
             return True
+
+    def __json__(self):
+        fields = ['id', 'name', 'created']
+        return dict((field, getattr(self, field)) for field in fields)

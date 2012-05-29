@@ -59,7 +59,7 @@ class UserHandler(BaseHandler):
 
     def update(self, user_id):
         user = DBSession.query(User).get(user_id)
-        assert self.can_modify(user)
+        self.can_modify(user)
 
         params = parse_request(self.request)
         print params.items()

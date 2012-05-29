@@ -1,8 +1,7 @@
 <%inherit file='/master.mako' />
 
-<h3>New User</h3>
 <div class="form-horizontal">
-  <fieldset></fieldset>
+  <fieldset><legend>Edit User</legend></fieldset>
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Update user</button>
   </div>
@@ -28,18 +27,10 @@ var fields = [
 var values = ${jsonize(user) | n};
 
 var form = new Form($('.form-horizontal fieldset'), fields, values);
+var $submit = $('button[type=submit]').click(submit);
 function submit() {
-  $.ajax('/users/update/${user.id}', {
-    type: 'POST',
-    data: form.get(),
-    dataType: 'json',
-    success: function(data, textStatus, jqXHR) {
-      $('button[type=submit]').flag({text: data.message});
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      $('button[type=submit]').flag({text: 'Connection failed: ' + textStatus});
-    }
+  post('/users/update/${user.id}', form.get(), function(data) {
+     $submit.flag({text: data.message});
   });
 }
-$('button[type=submit]').click(submit);
 </script>

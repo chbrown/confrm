@@ -1,4 +1,5 @@
 import boto
+from datetime import datetime
 from confrm.handlers import BaseHandler
 from confrm.models import DBSession, User, Group, GroupUser
 
@@ -9,7 +10,7 @@ class GroupHandler(BaseHandler):
 
     def index(self):
         if self.user.root:
-            self.ctx.groups = DBSession.query(Group).all()
+            self.ctx.groups = DBSession.query(Group).filter(Group.deleted==None).all()
         else:
             self.ctx.groups = self.user.groups
 
@@ -17,9 +18,11 @@ class GroupHandler(BaseHandler):
         pass
 
     def create(self):
-        group = Group(self.request.POST)
+        group = Group(**self.request.POST)
         DBSession.add(group)
         DBSession.flush()
+
+        self.set_ctx(success=True, message='Group added: %s' % group.name)
 
     def show(self, group_id):
         group = DBSession.query(Group).get(group_id)
@@ -35,7 +38,12 @@ class GroupHandler(BaseHandler):
 
     def delete(self, group_id):
         group = DBSession.query(Group).get(group_id)
-        self.ctx.group = group
+
+        self.can_modify(group)
+        group.deleted = datetime.now()
+        DBSession.flush()
+
+        self.set_ctx(success=True, message="Deleted group: %s" % group.name)
 
     def compose_email(self, group_id):
         self.ctx.from_users = DBSession.query(User).filter(User.email=='nasslli@nasslli2012.com').first()

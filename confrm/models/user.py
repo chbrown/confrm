@@ -1,7 +1,6 @@
 from sqlalchemy.orm import relationship
-from confrm.models import DeclarativeBase
-from confrm.models.tables import users, user_sessions, groups_users
-# from confrm.models.group import GroupUser
+from confrm.models import DeclarativeBase, Group, GroupUser, DBSession
+from confrm.models.tables import users, user_sessions, groups, groups_users
 
 class UserSchema(DeclarativeBase):
     __table__ = users
@@ -9,14 +8,17 @@ class UserSchema(DeclarativeBase):
     deleted_by  = relationship('User', primaryjoin=__table__.c.deleted_by_id==users.c.id)
     archived_by = relationship('User', primaryjoin=__table__.c.archived_by_id==users.c.id)
 
-    groups = relationship('Group', secondary=groups_users, backref="users")
+    # groups = relationship('Group', backref="users",
+    #     primaryjoin=groups_users.c.user_id==users.c.id,
+    #     secondary=groups_users,
+    #     secondaryjoin=groups_users.c.group_id==groups.c.id)
 
 class UserSession(DeclarativeBase):
     __table__ = user_sessions
     user = relationship('User', primaryjoin=__table__.c.user_id==users.c.id)
 
 class User(UserSchema):
-    def writeable_by(self, user):
+    def modifiable_by(self, user):
         return self.root or self.id == user.id
 
     @property
@@ -40,4 +42,11 @@ class User(UserSchema):
     def __json__(self):
         fields = ['email', 'first_name', 'middle_name', 'last_name', 'all_emails', 'tags',
             'classification', 'institution', 'department', 'international', 'notes']
-        return dict((field, getattr(self, field, None)) for field in fields)
+        return dict((field, getattr(self, field)) for field in fields)
+
+    @property
+    def groups(self):
+        return DBSession.query(Group).\
+            join(GroupUser, GroupUser.group_id==Group.id).\
+            filter(GroupUser.user_id==self.user.id).\
+            filter(Group.deleted==False).all()

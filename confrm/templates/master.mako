@@ -16,13 +16,12 @@
   <h2>ConfRM</h2>
   % if organization:
     <h3>${organization.name}</h3>
+    /{organization.slug}
   % endif
   <!-- <i class="icon-home"></i> -->
   <a href="/users/index" class="btn"><i class="icon-user"></i> Users</a>
   <a href="/files/index" class="btn"><i class="icon-file"></i> Files</a>
-  % if organization:
-    <a href="/{organization.slug}/groups/index" class="btn"><i class="icon-calendar"></i> Groups</a>
-  % endif
+  <a href="/groups/index" class="btn"><i class="icon-calendar"></i> Groups</a>
 </div>
 <div class="container">
   ${next.body()}
@@ -35,15 +34,9 @@ if (flash)
 $('a[data-method=DELETE]').click(function(ev) {
   ev.preventDefault();
   var $a = $(this);
-  $.ajax($a.attr('href'), {
-    type: 'DELETE',
-    success: function(data, textStatus, jqXHR) {
-      $a.flag({text: data.message});
-      // if (data.success)
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      $a.flag({text: 'Connection failed: ' + textStatus});
-    }
+  post($a.attr('href'), function(data) {
+    console.log(data);
+    $a.flag({text: data.message});
   });
 });
 </script>
