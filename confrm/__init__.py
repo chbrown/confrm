@@ -1,9 +1,9 @@
-# from pyramid.session import UnencryptedCookieSessionFactoryConfig
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
+import redis as redis_lib
+redis = redis_lib.StrictRedis()
 
 from confrm.session import DBSession, metadata
-# session_factory = UnencryptedCookieSessionFactoryConfig('PZbjJ5U3phGt')
 
 def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')

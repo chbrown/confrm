@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.me')).read()
+README = open(os.path.join(here, 'README.md')).read()
 
 requires = [
     'pyramid',
@@ -18,11 +18,12 @@ requires = [
     'xlrd',
     'openpyxl',
     'boto',
-    'python-memcached',
+    'redis',
+    'hiredis',
     ]
 
 setup(name='confrm',
-    version='0.0.2',
+    version='0.0.3',
     description='Conference Resource Management',
     long_description=README,
     classifiers=[],

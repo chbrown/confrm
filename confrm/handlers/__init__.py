@@ -2,8 +2,9 @@ from mako.exceptions import TopLevelLookupException
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.httpexceptions import HTTPFound  # HTTPNotFound, HTTPUnauthorized
+from confrm import redis
 from confrm.lib import jsonize
-from confrm.models import DBSession, UserSession
+from confrm.models import DBSession, UserSession, User
 from confrm.exc import NotAuthorized, UnauthorizedHTTPMethod
 
 def error404(request):
@@ -55,8 +56,13 @@ class BaseHandler(object):
     @property
     def user(self):
         ticket = self.request.cookies.get('ticket')
+        cache_key = 'ticket_user_id.%s' % ticket
+        user_id = redis.get(cache_key)
+        if user_id:
+            return DBSession.query(User).get(user_id)
         user_session = DBSession.query(UserSession).filter(UserSession.ticket==ticket).first()
         if user_session:
+            redis.set(cache_key, user_session.user.id)
             return user_session.user
         raise HTTPFound(location='/user_sessions/new?flash=Please+sign+in+first.')
 
