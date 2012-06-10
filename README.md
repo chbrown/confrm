@@ -18,15 +18,15 @@ It's intended to be a sort of mini-BlackBoard. Except not violating every conven
 
 ## DB Initialization / updates
 
-  # dropdb confrm_dev
+    # dropdb confrm_dev
 	createdb confrm_dev
 	# migrate create db_repo "ConfRM Database Repository"
 	# migrate manage db_repo/manage.py --repository=db_repo --url=postgresql://localhost/confrm_dev
 	python db_repo/manage.py version_control
 	python db_repo/manage.py upgrade
 
-  # Get started with a root user, at the CLI:
-  python confrm/scripts/add.py development.ini --email audiere@gmail.com --password needle --slug nasslli2012 --name "NASSLLI 2012"
+  	# Get started with a root user, at the CLI:
+  	python confrm/scripts/add.py development.ini --email audiere@gmail.com --password needle --slug nasslli2012 --name "NASSLLI 2012"
   
 ## Amazon SES Config
 
@@ -45,7 +45,8 @@ Or make them env variables:
 
 ## Migration examples:
 
-    003_Add_role_to_user.py
+003_Add_role_to_user.py
+
     # up:
     users = Table('users', meta, autoload=True)
     role_column = Column('role', Unicode(128))
@@ -54,7 +55,8 @@ Or make them env variables:
     users = Table('users', meta, autoload=True)
     users.c.role.drop()
 
-    004_Add_fks_to_users_and_events.py
+004_Add_fks_to_users_and_events.py
+    
     from sqlalchemy import Table, MetaData
     from migrate.changeset.constraint import ForeignKeyConstraint
     meta = MetaData()
