@@ -10,23 +10,24 @@ It's intended to be a sort of mini-BlackBoard. Except not violating every conven
 
 ## Running for Development
 
-	j confrm-dev
-	source bin/activate
-	cd src/
-	python setup.py develop
-	pserve --reload development.ini
+    j confrm-dev
+    source bin/activate
+    cd src/
+    python setup.py develop
+    pserve --reload development.ini
 
 ## DB Initialization / updates
 
     # dropdb confrm_dev
-	createdb confrm_dev
-	# migrate create db_repo "ConfRM Database Repository"
-	# migrate manage db_repo/manage.py --repository=db_repo --url=postgresql://localhost/confrm_dev
-	python db_repo/manage.py version_control
-	python db_repo/manage.py upgrade
+    createdb confrm_dev
+    # migrate create db_repo "ConfRM Database Repository"
+    # migrate manage db_repo/manage.py --repository=db_repo --url=postgresql://localhost/confrm_dev
+    python db_repo/manage.py version_control
+    python db_repo/manage.py upgrade
 
-  	# Get started with a root user, at the CLI:
-  	python confrm/scripts/add.py development.ini --email audiere@gmail.com --password needle --slug nasslli2012 --name "NASSLLI 2012"
+    # Get started with a root user, at the CLI:
+    python confrm/scripts/add.py development.ini --email audiere@gmail.com \
+      --password needle --slug nasslli2012 --name "NASSLLI 2012"
   
 ## Amazon SES Config
 
@@ -82,12 +83,12 @@ Or make them env variables:
 # To-do:
 
 1. Create dashboard page:
-	1. For superusers, this won't be much. They can do everything, so they don't have anything special to do.
-	2. For teachers, it would allow uploads and emails.
-	3. For students, it would be basically emails they've been sent and files they have access to.
+    1. For superusers, this won't be much. They can do everything, so they don't have anything special to do.
+    2. For teachers, it would allow uploads and emails.
+    3. For students, it would be basically emails they've been sent and files they have access to.
 2. Elegant handling of resources and permissions.
-	1. Each action should be decorated with a list of (view|modify, resource) pairs, or run some `assert_permission(self.user, 'modify', resource)` method in the action.
-	2. Every `assert_permission(self.user, 'modify', x)` entry should raise an exception if the method is not POST or PUT, to beat XSS attacks.
+    1. Each action should be decorated with a list of (view|modify, resource) pairs, or run some `assert_permission(self.user, 'modify', resource)` method in the action.
+    2. Every `assert_permission(self.user, 'modify', x)` entry should raise an exception if the method is not POST or PUT, to beat XSS attacks.
 6. Allow users to have some per-organization preferences, versus global info.
 This is not a big issue, since most deploys will be 1-organization. But you can stick that stuff on the organizations_users many2many relationship. (Question: What user info _is_ per-organization?)
 7. Outgoing emails should always be recorded ("broadcasts"?), attached to an group.
