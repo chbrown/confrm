@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2012 Christopher Brown (henrian.com)
-//   git://github.com/chbrown/jQuery-Flags.git
+// Copyright 2011-2012 Christopher Brown (henrian.com)
+//   https://github.com/chbrown/jquery-plugins
 // MIT Licensed - http://www.opensource.org/licenses/mit-license.php
 (function($) {
   $.fn.measureBox = function() {
@@ -44,7 +44,7 @@
 
   Flag.prototype.redraw = function() {
     this.$flag.fadeIn(80);
-    this.$span.text(this.text);
+    this.$span.html(this.html);
     var flag_size = this.$flag.measureBox(); // { width: 999, height: 999 }
 
     if (this.anchor === 'r' || this.anchor === 'l') {
@@ -100,7 +100,7 @@
       flag = new Flag($target, args.anchor || 'r', args.align || 'm', args.parent || document.body);
     }
     $target.data('flag', flag);
-    flag.text = args.text || '!!!';
+    flag.html = args.html || args.text || args.message || '!!!';
     flag.redraw();
 
     if (args.fade !== undefined) {
@@ -117,6 +117,8 @@
     // @args.attach: $(document.body)'
     // @args.element: $('#text1') | @args.selector: '#text1'
     // @args.text: 'blah'
+    if (typeof args === 'string')
+      args = {text: args};
     return this.each(function() {
       args.element = $(this);
       $.flag(args);
