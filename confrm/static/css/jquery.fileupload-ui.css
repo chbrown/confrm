@@ -28,6 +28,7 @@
   -moz-transform: translate(-300px, 0) scale(4);
   direction: ltr;
   cursor: pointer;
+  z-index: 1;
 }
 .fileupload-buttonbar .btn,
 .fileupload-buttonbar .toggle {

@@ -22,7 +22,7 @@ class GroupHandler(BaseHandler):
         DBSession.add(group)
         DBSession.flush()
 
-        self.set_ctx(success=True, message='Group added: %s' % group.name)
+        self.set(success=True, message='Group added: %s' % group.name)
 
     def show(self, group_id):
         group = DBSession.query(Group).get(group_id)
@@ -43,7 +43,7 @@ class GroupHandler(BaseHandler):
         group.deleted = datetime.now()
         DBSession.flush()
 
-        self.set_ctx(success=True, message="Deleted group: %s" % group.name)
+        self.set(success=True, message="Deleted group: %s" % group.name)
 
     def compose_email(self, group_id):
         self.ctx.from_users = DBSession.query(User).filter(User.email=='nasslli@nasslli2012.com').first()

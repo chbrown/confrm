@@ -30,9 +30,10 @@ class File(DeclarativeBase):
     def filepath(self):
         return '%s/%d-%s' % (self.directory, self.id, self.safe_filename)
 
-    def read(self, fp):
+    def read(self, file_contents):
+        if not isinstance(file_contents, basestring):
+            file_contents = file_contents.read()
         with open(self.filepath, 'wb') as local_fp:
-            file_contents = fp.read()
             file_size = len(file_contents)
             local_fp.write(file_contents)
         return file_size
@@ -55,4 +56,5 @@ class File(DeclarativeBase):
         return False
 
     def __json__(self):
-        return dict(filename=self.filename, safe_filename=self.safe_filename)
+        return dict(id=self.id, name=self.filename,
+            filename=self.filename, safe_filename=self.safe_filename)

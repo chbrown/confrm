@@ -4,6 +4,7 @@ from confrm.lib.table import read_table, guess_headers
 from confrm.handlers import BaseHandler
 from confrm.models import DBSession, User, File, Group
 
+
 class UserHandler(BaseHandler):
     """
     For uploads:
@@ -25,16 +26,17 @@ class UserHandler(BaseHandler):
     def new_from_file(self, file_id):
         # self.can('')
         # file_id = self.request.GET['file_id']
-        new_file = DBSession.query(File).get(file_id)
-        with open(new_file.filepath) as fp:
-            rows = read_table(new_file.filename, fp)
-            self.ctx.headers, self.ctx.data = guess_headers(rows)
+        file_object = DBSession.query(File).get(file_id)
+        with open(file_object.filepath) as fp:
+            rows = read_table(file_object.filename, fp)
+            headers, data = guess_headers(rows)
+            self.set(headers=headers, data=data)
 
     def create(self):
         params = parse_request(self.request)
 
         tag_csv = ','.join(params['tags'])
-        group = DBSession.query(Group).filter(Group.id==params['group_id']).first()
+        group = DBSession.query(Group).filter(Group.id.in_(params['groups'])).first()
         for user_dict in params['users']:
             new_user = User(**user_dict)
             if tag_csv:

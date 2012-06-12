@@ -7,13 +7,16 @@ from confrm.lib import jsonize
 from confrm.models import DBSession, UserSession, User
 from confrm.exc import NotAuthorized, UnauthorizedHTTPMethod
 
+
 def error404(request):
     return HTTPFound(location='/users/index')
+
 
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
         dict.__init__(self, *args, **kwargs)
         self.__dict__ = self
+
 
 class BaseHandler(object):
     format = 'mako'
@@ -32,20 +35,20 @@ class BaseHandler(object):
     def __route__(self, args):
         getattr(self, args[0])(*args[1:])
 
-    def __json__(self):
+    def json(self):
         json_string = jsonize(self.ctx)
         return Response(json_string, content_type='application/json')
 
     def __call__(self):
-        if self.format == 'json':
-            return self.__json__()
+        if self.format == 'json' or 'application/json' in str(self.request.accept):
+            return self.json()
         try:
             return render_to_response('/%s.mako' % '/'.join(self.path), self.ctx, request=self.request)
         except TopLevelLookupException:
             print 'Could not find mako, resorting to json.'
-            return self.__json__()
+            return self.json()
 
-    def set_ctx(self, **kw):
+    def set(self, **kw):
         self.ctx.update(kw)
 
     def flash(self, message, success=None):
@@ -60,7 +63,7 @@ class BaseHandler(object):
         user_id = redis.get(cache_key)
         if user_id:
             return DBSession.query(User).get(user_id)
-        user_session = DBSession.query(UserSession).filter(UserSession.ticket==ticket).first()
+        user_session = DBSession.query(UserSession).filter(UserSession.ticket == ticket).first()
         if user_session:
             redis.set(cache_key, user_session.user.id)
             return user_session.user

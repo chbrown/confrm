@@ -31,6 +31,38 @@ function auto(string) {
   }).join(' ');
 }
 
+(function($) {
+  $.fn.datagrid = function(render) {
+    return this.each(function() {
+      var $this = $(this),
+          $tbody = $this.children('tbody'),
+          url = $this.attr('data-url');
+
+      // cache the render function, or pull it from cache if needed
+      // (need failover if it's not in the cache, either)
+      if (render === undefined)
+        render = $this.data('render');
+      else
+        $this.data('render', render);
+
+      // make sure there is a tbody (which will be cleared)
+      if (!$tbody.length)
+        $tbody = $('<tbody></tbody>').appendTo($this);
+
+      $.ajax(url, {
+        dataType: 'json',
+        success: function(response, textStatus, jqXHR) {
+          $tbody.empty();
+          response.data.forEach(function(item) {
+            var tr = render(item);
+            $this.append(tr);
+          });
+        }
+      });
+    });
+  };
+})(jQuery);
+
 function Form($form, fields, values) {
   this.widgets = fields.map(function(field) {
     var value = values[field.key];
@@ -68,6 +100,13 @@ Widgets.text.prototype.get = function() {
   return this.$input.val();
 };
 
+Widgets.multiline = function() {};
+$.extend(Widgets.multiline.prototype, Widgets.text.prototype);
+Widgets.multiline.prototype.init = function($container, field, value) {
+  this.$input = $('<textarea id="' + field.key + '">' + (value || '') + '</textarea>').appendTo($container);
+  this.$input.css({width: '90%', height: '300px'});
+};
+
 Widgets.bool = function() {};
 Widgets.bool.prototype.init = function($container, field, value) {
   this.$input = $('<input type="checkbox" id="' + field.key + '" ' + (value ? 'checked="checked"' : '') + '>');
@@ -82,9 +121,12 @@ Widgets.csv.prototype.init = function($container, field, value) {
   var input_html = '<input type="text" class="input-xlarge" id="' + field.key + '" value="' + (value || '') + '">';
   this.$input = $(input_html).appendTo($container);
   this.$input.on('change', function() {
-    var raw = $(this).val();
-    var parts = raw.replace(/[- _]+/g, '-').split(',');
-    parts = parts.map(function(part) { return part.replace(/^-|-$/g, ''); });
+    var parts = [];
+    $(this).val().replace(/[- _]+/g, '-').split(',').forEach(function(part) {
+      part = part.replace(/^-|-$/g, '');
+      if (part)
+        parts.push(part);
+    });
     $(this).val(parts.join(', '));
   });
 };
@@ -98,8 +140,8 @@ Widgets.radiolist.prototype.init = function($container, field, value) {
   field.children.map(function(option, i) {
     $container.append('<label class="radio"><input type="radio" name="' + field.key + '" value="' + option + '"> ' + auto(option) + '</label> ');
   });
-  if (field.default)
-    $container.find('input[value="' + field.default + '"]').prop('checked', true);
+  if (field['default'])
+    $container.find('input[value="' + field['default'] + '"]').prop('checked', true);
 };
 Widgets.radiolist.prototype.get = function() {
   return this.$container.find('input:checked').val();
@@ -114,11 +156,19 @@ Widgets.list.prototype.get = function() {
 
 Widgets.object = function() {};
 Widgets.object.prototype.init = function($container, field, value) {
-  var $select = $('<select></select>').appendTo($container);
+  var $select = $('<select><option value="">-- not set --</option></select>').appendTo($container);
   $.ajax(field.url, {
+    dataType: 'json',
     success: function(data, textStatus, jqXHR) {
-      console.log($select);
-      // data
+      // console.log($select, data);
+      var values = [];
+      for (var key in data) {
+        if ($.isArray(data[key]))
+          values = data[key];
+      }
+      values.map(function(value) {
+        $('<option />').html(value.name).val(value.id).appendTo($select);
+      });
     }
   });
   this.$select = $select;

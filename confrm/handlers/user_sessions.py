@@ -22,9 +22,9 @@ class UserSessionHandler(BaseHandler):
             ticket = random_ticket()
             user_session = UserSession(user_id=user.id, ticket=ticket)
             DBSession.add(user_session)
-            self.set_ctx(success=True, message='Logged in.', ticket=ticket)
+            self.set(success=True, message='Logged in.', ticket=ticket)
         else:
-            self.set_ctx(success=False, message='Authentication failed, please try again.')
+            self.set(success=False, message='Authentication failed, please try again.')
 
     # def update(self, user_id):
         # user = DBSession.query(User).get(user_id)
