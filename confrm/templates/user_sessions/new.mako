@@ -1,7 +1,7 @@
 <%inherit file='/master.mako' />
 
 <div style="margin: 50px auto; width: 268px;">
-  <h3>Please login first:</h3>
+  <h3>Please login:</h3>
   <div class="well form-vertical">
     <div class="control-group">
       <label for="email">Email</label>
@@ -18,27 +18,23 @@
 </div>
 
 <script>
-function submit() {
-  $.ajax('/user_sessions/create', {
-    type: 'POST',
-    data: {email: $('#email').val(), password: $('#password').val()},
-    dataType: 'json',
-    success: function(data, textStatus, jqXHR) {
+head(function() {
+  function submit() {
+    ajax('/user_sessions/create', {email: $('#email').val(), password: $('#password').val()}, function(data) {
       $('button[type=submit]').flag({text: data.message});
       if (data.success) {
         $.cookie('ticket', data.ticket, {expires: 31, path: '/'});
+        var return_url = window.location.search.match(/[?&]url=([^?&]+)/);
+        // window.location = return_url ? decodeURIComponent(return_url[1]) : '/users/index';
       }
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      $('button[type=submit]').flag({text: 'Connection failed: ' + textStatus});
+    });
+  }
+  $('button[type=submit]').click(submit);
+  $('.form-vertical').on('keypress', function(ev) {
+    if (ev.keyCode === 13 && ev.target.type !== "textarea") {
+      ev.preventDefault();
+      submit();
     }
   });
-}
-$('button[type=submit]').click(submit);
-$('.form-vertical').on('keypress', function(ev) {
-  if (ev.keyCode === 13 && ev.target.type !== "textarea") {
-    submit();
-    ev.preventDefault();
-  }
 });
 </script>

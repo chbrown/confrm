@@ -1,9 +1,9 @@
 import boto
 from datetime import datetime
-from confrm.handlers import BaseHandler
+from confrm.handlers import AuthenticatedHandler
 from confrm.models import DBSession, User, Group, GroupUser
 
-class GroupHandler(BaseHandler):
+class GroupHandler(AuthenticatedHandler):
     def __route__(self, args):
         self.path = ['groups', args[0]]
         getattr(self, args[0])(*args[1:])

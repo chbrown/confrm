@@ -1,4 +1,10 @@
 // requires jquery, jquery.fileuploader, local
+function logf(prefix) {
+  return function() {
+    console.log('[' + prefix + ']', arguments);
+  };
+}
+
 var FileUploader = Backbone.View.extend({
   initialize: function(options) {
     if (options) this.title = options.title;
@@ -12,76 +18,58 @@ var FileUploader = Backbone.View.extend({
     });
     return this;
   },
+  done: function(result) {
+    console.log('Done event result', result);
+  },
   activate: function() {
-    this.$('form').fileupload({
-      // acceptFileTypes: /(\.|\/)(csv|tsv|xls|xlsx|txt)$/i,
-      // maxFileSize: 20000000,
+    var self = this;
+    var upload = this.$('form').fileupload({
       autoUpload: true,
-      dropZone: $('#dropzone')
+      dropZone: self.$('.dropzone')
     })
-    .bind('fileuploadadd', function(ev, status) {
-      $('.progress').fadeTo('fast', 1);
+    .bind('fileuploadadd', function(ev, data) {
+      self.$('.bar').width('0');
     })
-    .bind('fileuploaddone', function(ev, status) {
-      $('#files').datagrid();
-      setTimeout(function() {
-        $('.progress .bar').width((status.loaded / status.total) * 100 + '%');
-        $('.progress').fadeTo('slow', 0.01);
-        setTimeout(function() {
-          $('.progress .bar').width('0%');
-        }, 1000);
-      }, 2000);
+    .bind('fileuploaddone', function(ev, response) {
+      self.done(response.result);
     })
     .bind('fileuploadprogressall', function(ev, status) {
-      $('.progress .bar').width((status.loaded / status.total) * 100 + '%');
-    })
-    .bind('fileuploaddrop', function(ev, status) {
-      console.log('fileuploaddrop', ev, status);
-      // $('#dropzone').removeClass('btn btn-success');
+      self.$('.bar').width((status.loaded / status.total) * 100 + '%');
     })
     .bind('fileuploaddragover', function(ev) {
-      var $dropZone = $('#dropzone'),
-        timeout = window.dropZoneTimeout;
+      var $dropzone = self.$('.dropzone'),
+        timeout = window.dropzoneTimeout;
       // console.log('fileuploaddragover', $dropZone, ev);
       if (!timeout) {
-        $dropZone.addClass('in');
+        $dropzone.addClass('in');
       } else {
         clearTimeout(timeout);
       }
-      if (ev.target === $dropZone[0]) {
-        $dropZone.addClass('hover');
-      } else {
-        $dropZone.removeClass('hover');
-      }
-      window.dropZoneTimeout = setTimeout(function () {
-        window.dropZoneTimeout = null;
-        $dropZone.removeClass('in hover');
+      $dropzone.toggleClass('hover', ev.target === $dropzone[0]);
+      window.dropzoneTimeout = setTimeout(function () {
+        window.dropzoneTimeout = null;
+        $dropzone.removeClass('in hover');
       }, 100);
     });
+    // .bind('fileuploadalways',     logf('fileuploadalways'     ))
+    // .bind('fileuploaddone',     logf('fileuploaddone'     ))
+    // .bind('fileuploadfail',       logf('fileuploadfail'       ))
+    // .bind('fileuploadfailed',     logf('fileuploadfailed'     ))
+    // .bind('fileuploaddestroy',    logf('fileuploaddestroy'    ))
+    // .bind('fileuploadadded',      logf('fileuploadadded'      ))
+    // .bind('fileuploadstarted',    logf('fileuploadstarted'    ))
+    // .bind('fileuploadsent',       logf('fileuploadsent'       ))
+    // .bind('fileuploadcompleted',  logf('fileuploadcompleted'  ))
+    // .bind('fileuploadstopped',    logf('fileuploadstopped'    ))
+    // .bind('fileuploaddestroyed',  logf('fileuploaddestroyed'  ))
+    // .bind('fileuploadsubmit',     logf('fileuploadsubmit'     ))
+    // .bind('fileuploadsend',       logf('fileuploadsend'       ))
+    // .bind('fileuploadprogress',   logf('fileuploadprogress'   ))
+    // .bind('fileuploadstart',      logf('fileuploadstart'      ))
+    // .bind('fileuploadstop',       logf('fileuploadstop'       ))
+    // .bind('fileuploadchange',     logf('fileuploadchange'     ))
+    // .bind('fileuploadpaste',      logf('fileuploadpaste'      ))
   }
 });
 
 
-
-// function logf(prefix) {
-//   return function() {
-//     console.log('[' + prefix + ']', arguments);
-//   }
-// }
-// .bind('fileuploaddestroy',    logf('fileuploaddestroy'    ))
-// .bind('fileuploadadded',      logf('fileuploadadded'      ))
-// .bind('fileuploadstarted',    logf('fileuploadstarted'    ))
-// .bind('fileuploadsent',       logf('fileuploadsent'       ))
-// .bind('fileuploadcompleted',  logf('fileuploadcompleted'  ))
-// .bind('fileuploadfailed',     logf('fileuploadfailed'     ))
-// .bind('fileuploadstopped',    logf('fileuploadstopped'    ))
-// .bind('fileuploaddestroyed',  logf('fileuploaddestroyed'  ))
-// .bind('fileuploadsubmit',     logf('fileuploadsubmit'     ))
-// .bind('fileuploadsend',       logf('fileuploadsend'       ))
-// .bind('fileuploadfail',       logf('fileuploadfail'       ))
-// .bind('fileuploadalways',     logf('fileuploadalways'     ))
-// .bind('fileuploadprogress',   logf('fileuploadprogress'   ))
-// .bind('fileuploadstart',      logf('fileuploadstart'      ))
-// .bind('fileuploadstop',       logf('fileuploadstop'       ))
-// .bind('fileuploadchange',     logf('fileuploadchange'     ))
-// .bind('fileuploadpaste',      logf('fileuploadpaste'      ))

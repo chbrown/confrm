@@ -12,8 +12,8 @@ function ajax(url, data, callback) {
     callback = data;
     data = undefined;
   }
-  $.ajax(url, {type: 'POST', data: data, contentType: 'application/json', dataType: 'json'})
-    .done(function(data, textStatus, jqXHR) {
+  $.ajax(url, {type: 'POST', data: JSON.stringify(data), contentType: 'application/json', dataType: 'json'})
+    .done(function(response, textStatus, jqXHR) {
       callback(response);
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
@@ -33,7 +33,7 @@ function getTemplate(template_name, callback) {
   // callback signature (template_str)
   // not necessarily async (by design)
   var cache_key = 'templates:' + template_name;
-  if (localStorage[cache_key])
+  if (localStorage[cache_key] && !debug)
     return callback(localStorage[cache_key]);
   $.get('/templates/' + template_name + '.mu', function(template) {
     localStorage[cache_key] = template;

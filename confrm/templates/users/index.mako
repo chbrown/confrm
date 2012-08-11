@@ -1,6 +1,8 @@
 <%inherit file='/master.mako' />
 <%! from confrm.lib import jsonize %>
 
+<div id="uploader" style="float: right"></div>
+
 <h3>All Users</h3>
 <table class="table table-bordered table-striped table-condensed tablesorter">
   <tr>
@@ -40,9 +42,8 @@ head.js('/js/lib/jquery.js', '/js/lib/underback.js', '/js/lib/jquery.mustache.js
 });
 
 head.js('/js/lib/jquery.js', '/js/lib/jquery-ui.js', '/js/lib/jquery.iframe-transport.js', '/js/lib/jquery.fileupload.js', '/js/lib/jquery.fileupload-ui.js', '/js/fileupload.js', function() {
-  var uploader = new FileUploader();
-  $('body').append(uploader.$el);
-
+  var uploader = new FileUploader({title: 'Add from file', el: $('#uploader')});
+  // $('body').append(uploader.$el);
 });
 
 </script>

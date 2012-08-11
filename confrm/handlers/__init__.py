@@ -1,4 +1,5 @@
 from mako.exceptions import TopLevelLookupException
+from pyramid.settings import asbool
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.httpexceptions import HTTPFound  # HTTPNotFound, HTTPUnauthorized
@@ -6,7 +7,7 @@ from confrm import redis
 from confrm.lib import jsonize
 from confrm.models import DBSession, UserSession, User
 from confrm.exc import NotAuthorized, UnauthorizedHTTPMethod
-
+import urllib
 
 def error404(request):
     return HTTPFound(location='/users/index')
@@ -24,6 +25,7 @@ class BaseHandler(object):
     def __init__(self, request):
         self.request = request
         self.ctx = AttrDict()
+        self.ctx.debug = asbool(request.registry.settings['debug'])
 
         args = list(request.matchdict['args'])
         # self.path = [self.base, args[0]]
@@ -59,6 +61,7 @@ class BaseHandler(object):
     @property
     def user(self):
         ticket = self.request.cookies.get('ticket')
+        print 'ticket', ticket
         cache_key = 'ticket_user_id.%s' % ticket
         user_id = redis.get(cache_key)
         if user_id:
@@ -67,7 +70,8 @@ class BaseHandler(object):
         if user_session:
             redis.set(cache_key, user_session.user.id)
             return user_session.user
-        raise HTTPFound(location='/user_sessions/new?flash=Please+sign+in+first.')
+        return_url = urllib.quote_plus(self.request.path)
+        raise HTTPFound(location='/user_sessions/new?flash=Please+sign+in+first.&url=%s' % return_url)
 
     def can_view(self, resource):
         if self.user.root:
@@ -82,3 +86,9 @@ class BaseHandler(object):
             return True
         if not resource.modifiable_by(self.user):
             raise NotAuthorized('Cannot modify %s' % resource)
+
+
+class AuthenticatedHandler(BaseHandler):
+    def __init__(self, request):
+        super(AuthenticatedHandler, self).__init__(request)
+        self.ctx.user = self.user

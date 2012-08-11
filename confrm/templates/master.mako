@@ -1,3 +1,4 @@
+<%! from confrm.lib import jsonize %>
 <!DOCTYPE html>
 <meta charset="utf-8">
 <link rel="stylesheet/less" href="/static/css/master.less">
@@ -21,11 +22,12 @@
   ${next.body()}
 </div>
 <script>
+var debug = ${jsonize(debug) | n};
 var flash = window.location.search.match(/[?&]flash=([^?&]+)/);
 head.js('/js/lib/jquery.js', '/js/lib/jquery.flags.js', '/js/lib/jquery.tablesorter.js', '/js/lib/jquery.cookie.js', function() {
   $('.tablesorter').tablesorter();
   if (flash) {
-    console.log('flash', flash);
+    // console.log('flash', flash);
     $('#navbar h2').flag({text: flash[1].replace(/\+/g, ' '), anchor: 'r'});
   }
   $(document).on('click', 'a[data-method=DELETE]', function(ev) {

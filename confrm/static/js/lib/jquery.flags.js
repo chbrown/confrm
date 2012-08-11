@@ -22,6 +22,7 @@
   function Flag($target, anchor, align, parent) {
     var self = this;
     this.anchor = anchor;
+    this.align = align;
     this.$target = $target;
     this.parent = parent;
 

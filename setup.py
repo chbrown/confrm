@@ -8,9 +8,9 @@ README = open(os.path.join(here, 'README.md')).read()
 requires = [
     'pyramid',
     'SQLAlchemy',
-    'transaction',
+    # 'transaction',
     'pyramid_tm',
-    'pyramid_debugtoolbar',
+    'pyramid_debugtoolbar==1.0.3',
     'zope.sqlalchemy',
     'waitress',
     'mako',

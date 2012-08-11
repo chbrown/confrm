@@ -1,11 +1,11 @@
 import sqlalchemy.exc
 from confrm.lib import parse_request
 from confrm.lib.table import read_table, guess_headers
-from confrm.handlers import BaseHandler
+from confrm.handlers import AuthenticatedHandler
 from confrm.models import DBSession, User, File, Group
 
 
-class UserHandler(BaseHandler):
+class UserHandler(AuthenticatedHandler):
     """
     For uploads:
     1a. The user goes to /uploads/index to upload a file, csv or xls

@@ -2,7 +2,7 @@
 from datetime import datetime
 from pyramid.httpexceptions import HTTPFound
 from confrm.lib import parse_request
-from confrm.handlers import BaseHandler
+from confrm.handlers import AuthenticatedHandler
 from confrm.models import DBSession, File, FileGroup, GroupUser, FileUser
 
 
@@ -16,7 +16,7 @@ def add_user_file(user, filename):
     return new_file
 
 
-class FileHandler(BaseHandler):
+class FileHandler(AuthenticatedHandler):
     def __route__(self, args):
         self.path = ['files', args[0]]
         getattr(self, args[0])(*args[1:])
@@ -71,7 +71,7 @@ class FileHandler(BaseHandler):
         #     DBSession.add(file_group)
         # DBSession.flush()
         new_file.read(upload.file)
-        self.set(success=True, message='Added file, %s' % new_file.filename)
+        self.set(success=True, message='Added file, %s' % new_file.filename, id=new_file.id)
 
     def show(self, file_id):
         file_object = DBSession.query(File).get(file_id)

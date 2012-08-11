@@ -13,8 +13,8 @@ class UserSessionHandler(BaseHandler):
         pass
 
     def create(self):
-        email = self.request.POST.get('email')
-        password = self.request.POST.get('password', '')
+        email = self.request.json_body.get('email')
+        password = self.request.json_body.get('password', '')
 
         password_hash = User.hash_password(email, password)
 
