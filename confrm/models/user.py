@@ -1,6 +1,8 @@
 from sqlalchemy.orm import relationship
 from confrm.models import DeclarativeBase, Group, GroupUser, DBSession
 from confrm.models.tables import users, user_sessions, groups, groups_users
+import hashlib
+
 
 class UserSchema(DeclarativeBase):
     __table__ = users
@@ -13,9 +15,11 @@ class UserSchema(DeclarativeBase):
     #     secondary=groups_users,
     #     secondaryjoin=groups_users.c.group_id==groups.c.id)
 
+
 class UserSession(DeclarativeBase):
     __table__ = user_sessions
     user = relationship('User', primaryjoin=__table__.c.user_id==users.c.id)
+
 
 class User(UserSchema):
     def modifiable_by(self, user):
@@ -50,3 +54,10 @@ class User(UserSchema):
             join(GroupUser, GroupUser.group_id==Group.id).\
             filter(GroupUser.user_id==self.user.id).\
             filter(Group.deleted==False).all()
+
+    def set_password(self, raw_password):
+        self.password = self.hash_password(self.email, raw_password)
+
+    @classmethod
+    def hash_password(cls, email, password):
+        return hashlib.sha256('%s::%s' % (email, password)).hexdigest()

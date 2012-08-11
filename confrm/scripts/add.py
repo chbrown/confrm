@@ -3,7 +3,6 @@ import os
 import sys
 import transaction
 from ConfigParser import ConfigParser
-from confrm.lib import hash_password
 from confrm.session import DBSession, metadata
 from sqlalchemy import engine_from_config
 
@@ -26,19 +25,22 @@ metadata.bind = engine
 
 from confrm.models import Organization, User, OrganizationUser
 
-if 'email' in argd:
-    user = User(email=argd['email'], password=hash_password(argd['password']), root=True)
+user = None
+org = None
+if 'user-email' in argd:
+    user = User(email=argd['user-email'], root=True)
+    user.set_password(argd['user-password'])
     DBSession.add(user)
     DBSession.flush()
     print 'Added email'
 
-if 'slug' in argd:
-    org = Organization(slug=argd['slug'], name=argd['name'])
+if 'org-slug' in argd:
+    org = Organization(slug=argd['org-slug'], name=argd['org-name'])
     DBSession.add(org)
     DBSession.flush()
     print 'Added organization'
 
-if 'email' in argd and 'slug' in argd:
+if user and org:
     org_user = OrganizationUser(user_id=user.id, organization_id=org.id, owner=True)
     DBSession.add(org_user)
     DBSession.flush()

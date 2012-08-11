@@ -1,0 +1,51 @@
+<script>
+var fields = [
+  {key: 'email', type: 'text'}},
+  {key: 'first_name', type: 'text'}},
+  {key: 'middle_name', type: 'text'}},
+  {key: 'last_name', type: 'text'}},
+  {key: 'all_emails', type: 'csv'}},
+  {key: 'tags', type: 'csv'}},
+
+  {key: 'classification', type: 'text'}},
+  {key: 'institution', type: 'text'}},
+  {key: 'department', type: 'text'}},
+  {key: 'international', type: 'bool'}},
+
+  {key: 'notes', type: 'text'}}
+];
+
+var user = {{user}}}},
+  form = new Form({el: $('.form-horizontal fieldset'), fields: fields, model: user}});
+var $submit = $('button[type=submit]').click(submit);
+function submit() {
+  post('/users/update/{{id}}', form.get(), function(data) {
+     $submit.flag({text: data.message}});
+  }});
+}}
+</script>
+
+<div class="form-horizontal">
+  <fieldset><legend>Create new</legend></fieldset>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Add file</button>
+  </div>
+</div>
+<script>
+head.ready(function() {
+  var fields = [
+    { key: 'filename', type: 'text' },
+    { key: 'contents', type: 'multiline' }
+  ];
+  var form = new Form($('.form-horizontal fieldset'), fields, {});
+  function submit() {
+    var data = form.get(),
+        $button = $(this);
+    post('/files/create', JSON.stringify(data), function(result) {
+      $button.flag({html: result.message || 'Added file.'});
+      $('#files').datagrid();
+    });
+  }
+  $('button[type=submit]').click(submit);
+});
+</script>

@@ -1,5 +1,5 @@
-@import "/static/css/bootstrap.css";
-@import "/static/css/prefixer.less";
+@import "/css/bootstrap.css";
+@import "/css/prefixer.less";
 
 body {
   padding: 47px 10px 10px;
@@ -19,32 +19,39 @@ body {
     display: inline-block;
   }
 }
+.flag {
+  z-index: 200;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
 
 .fileupload-buttonbar {
   input, button {
     vertical-align: top;
   }
 }
-.nowrap {
-  white-space: nowrap;
+form.fileupload {
+  h4 {
+    vertical-align: middle;
+  }
 }
-#dropzone {
-    padding: 3px 50px;
-    display: inline-block;
-}
-#dropzone.in {
-  // width: 600px;
-  // height: 200px;
-  // line-height: 200px;
-  // font-size: larger;
-  background: #bbb;
-}
-#dropzone.hover {
-  background: #999;
-}
-#dropzone.fade {
-  .transition(all 0.3s ease-out);
-  opacity: 1;
+.dropzone {
+  padding: 3px 30px;
+  display: inline-block;
+  border-radius: 4px;
+  border: 2px dashed #ddd;
+  &.in {
+    background: #bbb;
+  }
+  &.hover {
+    background: #999;
+  }
+  &.fade {
+    .transition(all 0.3s ease-out);
+    opacity: 1;
+  }
 }
 
 /* tables */

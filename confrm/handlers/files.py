@@ -5,6 +5,7 @@ from confrm.lib import parse_request
 from confrm.handlers import BaseHandler
 from confrm.models import DBSession, File, FileGroup, GroupUser, FileUser
 
+
 def add_user_file(user, filename):
     new_file = File(filename=filename)
     DBSession.add(new_file)
@@ -14,12 +15,16 @@ def add_user_file(user, filename):
     DBSession.flush()
     return new_file
 
+
 class FileHandler(BaseHandler):
     def __route__(self, args):
         self.path = ['files', args[0]]
         getattr(self, args[0])(*args[1:])
 
     def index(self, *args):
+        pass
+
+    def new(self, *args):
         pass
 
     def data(self, *args):
@@ -39,16 +44,30 @@ class FileHandler(BaseHandler):
 
     def create(self, *args):
         params = parse_request(self.request)
-        new_file = add_user_file(self.user, params['filename'])
+        filename = params.get('filename')
+        if not filename:
+            now = datetime.today()
+            filename = now.strftime('NA-%Y-%m-%dT%H-%M-%s.txt')
+        new_file = add_user_file(self.user, filename)
         new_file.read(params['contents'])
-        self.set(success=True, message='Added file, %s' % params['filename'])
+
+        self.set(success=True, message='Added file, %s' % filename)
 
     def upload(self, *args):
+        """
+        Upload spreadsheet:
+          1. Get column mapping with custom functions
+          2. Save mapping & functions
+          3. Show preview
+          4. Resolve duplicates
+            Possibly interactively?
+        """
         upload = self.request.POST['files[]']
         new_file = add_user_file(self.user, upload.filename)
         # group_id = self.request.POST.get('group_id')
         # if group_id:
-        #     file_group = FileGroup(group_id=group_id, file_id=new_file.id, owner=False)
+        #     file_group = FileGroup(group_id=group_id,
+            # file_id=new_file.id, owner=False)
         #     DBSession.add(file_group)
         # DBSession.flush()
         new_file.read(upload.file)
