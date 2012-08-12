@@ -1,12 +1,25 @@
 // requires jquery, underback, jquery.mustache, and local
-var UserRow = Backbone.View.extend({
+var RowView = Backbone.View.extend({
   tagName: 'tr',
   initialize: function() {
     return this.render();
-  },
+  }
+});
+
+var UserRow = RowView.extend({
   render: function() {
     var self = this;
     interpolate('users/single', this.model, function(html) {
+      self.$el.html(html);
+    });
+    return this;
+  }
+});
+
+var FileRow = RowView.extend({
+  render: function() {
+    var self = this;
+    interpolate('files/single', this.model, function(html) {
       self.$el.html(html);
     });
     return this;

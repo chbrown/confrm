@@ -49,3 +49,39 @@ head.ready(function() {
   $('button[type=submit]').click(submit);
 });
 </script>
+
+<h3>Preview users:</h3>
+<table class="table table-bordered table-striped tablesorter">
+  <thead>
+    <tr>
+      <th></th>
+      % for header in headers:
+        <th>${header}</th>
+      % endfor
+    </tr>
+  </thead>
+  <tbody>
+    % for i, row in enumerate(data):
+    <tr>
+      <td>${i}</td>
+      % for cell in row:
+        <td>${cell}</td>
+      % endfor
+    </tr>
+    % endfor
+  </tbody>
+</table>
+
+function getUsers() {
+  var headers = $('table thead th').map(function(i, th) {
+    return $(th).text();
+  }).toArray();
+  return $('table tbody tr').map(function(i, tr) {
+    // zip headers+data
+    var user = new User();
+    $(tr).children('td').each(function(i, td) {
+      user.add(headers[i], $(td).text());
+    })
+    return user;
+  }).toArray();
+}

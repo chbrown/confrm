@@ -18,25 +18,22 @@ var FileUploader = Backbone.View.extend({
     });
     return this;
   },
-  done: function(result) {
-    console.log('Done event result', result);
-  },
   activate: function() {
     var self = this;
     var upload = this.$('form').fileupload({
       autoUpload: true,
       dropZone: self.$('.dropzone')
     })
-    .bind('fileuploadadd', function(ev, data) {
-      self.$('.bar').width('0');
-    })
+    // .bind('fileuploadadd', function(ev, data) {
+    // })
     .bind('fileuploaddone', function(ev, response) {
-      self.done(response.result);
+      self.trigger('done', response.result);
     })
     .bind('fileuploadprogressall', function(ev, status) {
       self.$('.bar').width((status.loaded / status.total) * 100 + '%');
     })
     .bind('fileuploaddragover', function(ev) {
+      self.$('.bar').width('0');
       var $dropzone = self.$('.dropzone'),
         timeout = window.dropzoneTimeout;
       // console.log('fileuploaddragover', $dropZone, ev);

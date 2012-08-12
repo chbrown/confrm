@@ -22,12 +22,6 @@ class FileHandler(AuthenticatedHandler):
         getattr(self, args[0])(*args[1:])
 
     def index(self, *args):
-        pass
-
-    def new(self, *args):
-        pass
-
-    def data(self, *args):
         group_files = DBSession.query(File).\
             filter(File.deleted==None).\
             join(FileGroup, File.id==FileGroup.file_id).\
@@ -36,10 +30,15 @@ class FileHandler(AuthenticatedHandler):
         user_files = DBSession.query(File).\
             filter(File.deleted==None).\
             join(FileUser, FileUser.user_id==self.user.id).all()
+        self.ctx.files = group_files + user_files
+
+    def new(self, *args):
+        pass
+
+    # def data(self, *args):
         # filenames = os.listdir(self.localdir)
         # self.ctx.group_files = group_files
         # self.ctx.user_files = user_files
-        self.ctx.data = group_files + user_files
         # [filename for filename in filenames if not filename.startswith('.')]
 
     def create(self, *args):
