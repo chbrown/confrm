@@ -43,7 +43,8 @@ var UserRow = RowView.extend({
 var FileRow = RowView.extend({
   events: {
     'click a.state': 'clickState',
-    'click a[data-method=DELETE]': 'clickDelete'
+    'click a[data-method=DELETE]': 'clickDelete',
+    'click .save': 'save'
   },
   clickState: function(ev) {
     ev.preventDefault();
@@ -61,6 +62,9 @@ var FileRow = RowView.extend({
       console.log(data);
       $a.flag({text: data.message});
     });
+  },
+  save: function() {
+    this.model.save();
   },
   render: function() {
     return this.useTemplate('files/row-normal');

@@ -1,3 +1,6 @@
+import re
+import shutil
+from pyramid.response import FileResponse
 from datetime import datetime
 from pyramid.httpexceptions import HTTPFound
 from confrm.lib import parse_request
@@ -80,9 +83,22 @@ class FileHandler(AuthenticatedHandler):
 
     def show(self, file_id):
         file_object = DBSession.query(File).get(file_id)
-        with open(file_object.filepath, 'r') as local_fp:
-            file_contents = local_fp.read(65535)
-        self.set(contents=file_contents, **file_object.__json__())
+        self.set(**file_object.__json__())
+        if re.search('txt|csv|tab|tsv', file_object.filepath, re.I) or '.' not in file_object.filepath:
+            with open(file_object.filepath, 'r') as local_fp:
+                self.ctx.contents = local_fp.read(65535)
+        elif re.search('jpe?g|png|gif', file_object.filepath, re.I):
+            self.ctx.img = '/files/read/%d' % file_object.id
+        else:
+            self.ctx.url = '/files/read/%d' % file_object.id
+
+    def read(self, file_id):
+        file_object = DBSession.query(File).get(file_id)
+        # self.rendered = True
+        # with open(file_object.filepath, 'r') as fp:
+            # shutil.copyfileobj(fp, self.request.response)
+        # fp = open(file_object.filepath, 'r')
+        self.response = FileResponse(file_object.filepath)
 
     def delete(self, file_id):
         file_object = DBSession.query(File).get(file_id)

@@ -24,12 +24,10 @@
 <script>
 var debug = ${jsonize(debug) | n};
 var flash = window.location.search.match(/[?&]flash=([^?&]+)/);
-head.js('/js/lib/jquery.js', '/js/lib/jquery.flags.js', '/js/lib/jquery.tablesorter.js', '/js/lib/jquery.cookie.js', function() {
-  $('.tablesorter').tablesorter();
-  if (flash) {
-    // console.log('flash', flash);
-    $('#navbar h2').flag({text: flash[1].replace(/\+/g, ' '), anchor: 'r'});
-  }
+// $('.tablesorter').tablesorter();
+// '/js/lib/jquery.tablesorter.js',
+head.js('/js/lib/jquery.js', '/js/lib/jquery.flags.js', function() {
+  if (flash) $('#navbar h2').flag({text: flash[1].replace(/\+/g, ' '), anchor: 'r'});
 });
-head.js('/js/lib/underscore.js').js('/js/lib/date.js').js('/js/local.js');
+head.js('/js/lib/underscore.js').js('/js/lib/date.js').js('/js/local.js').js('/js/lib/jquery.cookie.js');
 </script>

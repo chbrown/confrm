@@ -22,6 +22,7 @@ class AttrDict(dict):
 
 class BaseHandler(object):
     format = 'mako'
+    response = None
 
     def __init__(self, request):
         self.request = request
@@ -43,13 +44,16 @@ class BaseHandler(object):
         return Response(json_string, content_type='application/json')
 
     def __call__(self):
-        if self.format == 'json' or 'application/json' in str(self.request.accept):
-            return self.json()
-        try:
-            return render_to_response('/%s.mako' % '/'.join(self.path), self.ctx, request=self.request)
-        except TopLevelLookupException:
-            # print 'Could not find mako, resorting to json.'
-            return self.json()
+        if self.response:
+            return self.response
+        else:
+            if self.format == 'json' or 'application/json' in str(self.request.accept):
+                return self.json()
+            try:
+                return render_to_response('/%s.mako' % '/'.join(self.path), self.ctx, request=self.request)
+            except TopLevelLookupException:
+                # print 'Could not find mako, resorting to json.'
+                return self.json()
 
     def set(self, **kw):
         self.ctx.update(kw)
