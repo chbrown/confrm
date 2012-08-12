@@ -1,5 +1,4 @@
 import re
-import shutil
 from pyramid.response import FileResponse
 from datetime import datetime
 from pyramid.httpexceptions import HTTPFound
@@ -89,16 +88,15 @@ class FileHandler(AuthenticatedHandler):
                 self.ctx.contents = local_fp.read(65535)
         elif re.search('jpe?g|png|gif', file_object.filepath, re.I):
             self.ctx.img = '/files/read/%d' % file_object.id
-        else:
-            self.ctx.url = '/files/read/%d' % file_object.id
+        self.ctx.download = '/files/download/%d' % file_object.id
 
     def read(self, file_id):
-        file_object = DBSession.query(File).get(file_id)
-        # self.rendered = True
-        # with open(file_object.filepath, 'r') as fp:
-            # shutil.copyfileobj(fp, self.request.response)
-        # fp = open(file_object.filepath, 'r')
-        self.response = FileResponse(file_object.filepath)
+        self.file_object = DBSession.query(File).get(file_id)
+        self.response = FileResponse(self.file_object.filepath)
+
+    def download(self, file_id):
+        self.read(file_id)
+        self.response.content_disposition = 'attachment; filename="%s"' % self.file_object.filename
 
     def delete(self, file_id):
         file_object = DBSession.query(File).get(file_id)

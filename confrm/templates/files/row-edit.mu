@@ -5,6 +5,6 @@
   </div>
 </td>
 <td class="controls">
-  <a href="#" class="state" data-state="normal"><i class="icon-list-alt"></i> Back (discard unsaved changes)</a>
   <a href="#" class="save"><i class="icon-check"></i> Save</a>
+  <a href="#" class="state" data-state="normal"><i class="icon-list-alt"></i> Back (discard unsaved changes)</a>
 </td>

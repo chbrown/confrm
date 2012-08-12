@@ -70,7 +70,6 @@ def guess_headers(rows):
         return headers, rows
 
 def guess_users(rows):
-
     flat_row_0 = ' '.join(rows[0])
     # try to determine whether the first row is headers or data
     if len(re.findall('email|first|last|name', flat_row_0, re.I)) > 0:
@@ -95,7 +94,8 @@ def guess_users(rows):
 
         # add some defaults:
         for col_i, cell_guess in enumerate(['first_name', 'last_name', 'email']):
-            votes[col_i][cell_guess] += 1
+            if col_i < len(votes):
+                votes[col_i][cell_guess] += 1
 
         headers = [vote_counter.most_common(1)[0][0] for vote_counter in votes]
         data = rows

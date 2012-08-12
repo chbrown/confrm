@@ -63,7 +63,8 @@ var FileRow = RowView.extend({
       $a.flag({text: data.message});
     });
   },
-  save: function() {
+  save: function(ev) {
+    ev.preventDefault();
     this.model.save();
   },
   render: function() {
@@ -74,6 +75,7 @@ FileRow.addToTable = function(raw_file, $table) {
   var file_model = new FileModel(raw_file),
     row = new FileRow({model: file_model});
   $table.append(row.$el);
+  return row;
 };
 
   // (function($) {
