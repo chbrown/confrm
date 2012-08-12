@@ -56,5 +56,4 @@ class File(DeclarativeBase):
         return False
 
     def __json__(self):
-        return dict(id=self.id, name=self.filename,
-            filename=self.filename, safe_filename=self.safe_filename)
+        return dict(id=self.id, filename=self.filename)

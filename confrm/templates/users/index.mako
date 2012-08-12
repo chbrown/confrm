@@ -31,39 +31,26 @@ var users = ${jsonize(users) | n};
 head.js('/js/lib/jquery.js', '/js/lib/underback.js', '/js/lib/jquery.mustache.js', '/js/local.js', '/js/grid.js', function() {
   var $table = $('table.table');
   users.forEach(function(user) {
-    var row = new UserRow({model: user});
+    var user_model = new UserModel(user),
+      row = new UserRow({model: user_model});
     $table.append(row.$el)
   });
-  // Uploader() constructor takes a function that will translate an uploaded file_id
-  // to the url: where do we go after loading?
-  // var uploader = new Uploader('Upload from file', function(file_id) {
-  //   window.location = '/users/new_from_file/' + file_id;
-  // });
+
   head.js('/js/lib/jquery-ui.js', '/js/lib/jquery.iframe-transport.js', '/js/lib/jquery.fileupload.js', '/js/lib/jquery.fileupload-ui.js', '/js/fileupload.js', function() {
     var uploader = new FileUploader({title: 'Add from file', el: $('#uploader')});
-    uploader.on('done', function(ev, result) {
-      // self.trigger('done', response.result);
-      
-      result.id
+    uploader.on('done', function(result) {
+      ajax('/files/as_users/' + result.file.id, function(data) {
+        $table.empty();
+        data.users.forEach(function(user) {
+          var user_model = new UserModel(user),
+            row = new UserRow({model: user_model});
+          $table.append(row.$el)
+        });
+      });
     });
   });
 });
 
-
-function User() { }
-User.prototype.add = function(key, value) {
-  if (key === 'full_name') {
-    var name_parts = value.split(/\s+/);
-    this.first_name = name_parts[0];
-    if (name_parts.length > 2) {
-      this.middle_name = name_parts.slice(1, name_parts.length - 1).join(' ');
-    }
-    this.last_name = name_parts[name_parts.length - 1];
-  }
-  else if (key) {
-    this[key] = value;
-  }
-};
 
 var fields = [
   {
@@ -95,7 +82,7 @@ var fields = [
     help: 'Add or replace groups, if user already exists?',
   },
 ];
-var form = new Form($('.form-horizontal fieldset'), fields, {});
+// var form = new Form($('.form-horizontal fieldset'), fields, {});
 
 function submit() {
   var data = form.get();
@@ -111,5 +98,5 @@ function submit() {
     }
   });
 }
-$('button[type=submit]').click(submit);
+// $('button[type=submit]').click(submit);
 </script>

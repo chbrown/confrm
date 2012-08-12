@@ -1,8 +1,7 @@
 import sqlalchemy.exc
 from confrm.lib import parse_request
-from confrm.lib.table import read_table, guess_headers
 from confrm.handlers import AuthenticatedHandler
-from confrm.models import DBSession, User, File, Group
+from confrm.models import DBSession, User, Group
 
 
 class UserHandler(AuthenticatedHandler):
@@ -22,15 +21,6 @@ class UserHandler(AuthenticatedHandler):
     def index(self):
         users = DBSession.query(User).all()
         self.ctx.users = users
-
-    def new_from_file(self, file_id):
-        # self.can('')
-        # file_id = self.request.GET['file_id']
-        file_object = DBSession.query(File).get(file_id)
-        with open(file_object.filepath) as fp:
-            rows = read_table(file_object.filename, fp)
-            headers, data = guess_headers(rows)
-            self.set(headers=headers, data=data)
 
     def create(self):
         params = parse_request(self.request)

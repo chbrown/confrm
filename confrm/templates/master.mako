@@ -30,14 +30,6 @@ head.js('/js/lib/jquery.js', '/js/lib/jquery.flags.js', '/js/lib/jquery.tablesor
     // console.log('flash', flash);
     $('#navbar h2').flag({text: flash[1].replace(/\+/g, ' '), anchor: 'r'});
   }
-  $(document).on('click', 'a[data-method=DELETE]', function(ev) {
-    ev.preventDefault();
-    var $a = $(this);
-    post($a.attr('href'), function(data) {
-      console.log(data);
-      $a.flag({text: data.message});
-    });
-  });
 });
 head.js('/js/lib/underscore.js').js('/js/lib/date.js').js('/js/local.js');
 </script>

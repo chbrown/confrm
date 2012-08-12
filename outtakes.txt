@@ -85,3 +85,16 @@ function getUsers() {
     return user;
   }).toArray();
 }
+
+<tr>
+  {{#headers}}
+    <th>{{.}}</th>
+  {{/headers}}
+</tr>
+{{#data}}
+  <tr>
+    {{#.}}
+      <td>{{.}}</td>
+    {{/.}}
+  </tr>
+{{/data}}

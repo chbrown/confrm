@@ -9,6 +9,7 @@ from confrm.models import DBSession, UserSession, User
 from confrm.exc import NotAuthorized, UnauthorizedHTTPMethod
 import urllib
 
+
 def error404(request):
     return HTTPFound(location='/users/index')
 
@@ -47,7 +48,7 @@ class BaseHandler(object):
         try:
             return render_to_response('/%s.mako' % '/'.join(self.path), self.ctx, request=self.request)
         except TopLevelLookupException:
-            print 'Could not find mako, resorting to json.'
+            # print 'Could not find mako, resorting to json.'
             return self.json()
 
     def set(self, **kw):
@@ -61,7 +62,6 @@ class BaseHandler(object):
     @property
     def user(self):
         ticket = self.request.cookies.get('ticket')
-        print 'ticket', ticket
         cache_key = 'ticket_user_id.%s' % ticket
         user_id = redis.get(cache_key)
         if user_id:

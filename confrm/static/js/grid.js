@@ -1,30 +1,76 @@
 // requires jquery, underback, jquery.mustache, and local
+
+var User = Backbone.Model.extend({
+});
+
+var FileModel = Backbone.Model.extend({
+  url: function() {
+    return '/files/show/' + this.get('id');
+  }
+});
+// FileModel.prototype.beforeGet = function(key) {
+//   if (key === 'contents' && this.get(key) === undefined) {
+//     this.fetch();
+//   }
+// };
+// FileModel.prototype.get = function(key) {
+//   console.log('FileModel.prototype.get', key);
+//   this.beforeGet(attrs);
+//   FileModel.__super__.get.apply(this, arguments);
+// };
+
+
 var RowView = Backbone.View.extend({
   tagName: 'tr',
   initialize: function() {
     return this.render();
+  },
+  useTemplate: function(template_name) {
+    var self = this;
+    interpolate(template_name, this.model.toJSON(), function(html) {
+      self.$el.html(html);
+    });
+    return this;
   }
 });
 
 var UserRow = RowView.extend({
   render: function() {
-    var self = this;
-    interpolate('users/single', this.model, function(html) {
-      self.$el.html(html);
-    });
-    return this;
+    return this.useTemplate('users/row');
   }
 });
 
 var FileRow = RowView.extend({
-  render: function() {
-    var self = this;
-    interpolate('files/single', this.model, function(html) {
-      self.$el.html(html);
+  events: {
+    'click a.state': 'clickState',
+    'click a[data-method=DELETE]': 'clickDelete'
+  },
+  clickState: function(ev) {
+    ev.preventDefault();
+    var self = this, state = $(ev.target).attr('data-state');
+    this.model.fetch({
+      success: function() {
+        return self.useTemplate('files/row-' + state);
+      }
     });
-    return this;
+  },
+  clickDelete: function(ev) {
+    ev.preventDefault();
+    var $a = $(ev.target);
+    ajax($a.attr('href'), function(data) {
+      console.log(data);
+      $a.flag({text: data.message});
+    });
+  },
+  render: function() {
+    return this.useTemplate('files/row-normal');
   }
 });
+FileRow.addToTable = function(raw_file, $table) {
+  var file_model = new FileModel(raw_file),
+    row = new FileRow({model: file_model});
+  $table.append(row.$el);
+};
 
   // (function($) {
   //   $.fn.datagrid = function(render) {

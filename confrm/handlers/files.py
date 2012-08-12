@@ -1,7 +1,7 @@
-# import re
 from datetime import datetime
 from pyramid.httpexceptions import HTTPFound
 from confrm.lib import parse_request
+from confrm.lib.table import read_table, guess_users
 from confrm.handlers import AuthenticatedHandler
 from confrm.models import DBSession, File, FileGroup, GroupUser, FileUser
 
@@ -70,13 +70,19 @@ class FileHandler(AuthenticatedHandler):
         #     DBSession.add(file_group)
         # DBSession.flush()
         new_file.read(upload.file)
-        self.set(success=True, message='Added file, %s' % new_file.filename, id=new_file.id)
+        self.set(success=True, message='Added file, %s' % new_file.filename, file=new_file)
+
+    def as_users(self, file_id):
+        file_object = DBSession.query(File).get(file_id)
+        with open(file_object.filepath, 'r') as fp:
+            rows = read_table(file_object.filename, fp)
+            self.ctx.users = guess_users(rows)
 
     def show(self, file_id):
         file_object = DBSession.query(File).get(file_id)
         with open(file_object.filepath, 'r') as local_fp:
-            file_contents = local_fp.read(65536)
-        self.set(file=file_object, file_contents=file_contents)
+            file_contents = local_fp.read(65535)
+        self.set(contents=file_contents, **file_object.__json__())
 
     def delete(self, file_id):
         file_object = DBSession.query(File).get(file_id)

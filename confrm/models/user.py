@@ -44,7 +44,7 @@ class User(UserSchema):
                 setattr(self, field, other_value)
 
     def __json__(self):
-        fields = ['email', 'first_name', 'middle_name', 'last_name', 'all_emails', 'tags',
+        fields = ['id', 'email', 'first_name', 'middle_name', 'last_name', 'all_emails', 'tags',
             'classification', 'institution', 'department', 'international', 'notes']
         return dict((field, getattr(self, field)) for field in fields)
 

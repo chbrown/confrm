@@ -1,9 +1,9 @@
 // requires jquery, jquery.fileuploader, local
-function logf(prefix) {
-  return function() {
-    console.log('[' + prefix + ']', arguments);
-  };
-}
+// function logf(prefix) {
+//   return function() {
+//     console.log('[' + prefix + ']', arguments);
+//   };
+// }
 
 var FileUploader = Backbone.View.extend({
   initialize: function(options) {
@@ -24,8 +24,6 @@ var FileUploader = Backbone.View.extend({
       autoUpload: true,
       dropZone: self.$('.dropzone')
     })
-    // .bind('fileuploadadd', function(ev, data) {
-    // })
     .bind('fileuploaddone', function(ev, response) {
       self.trigger('done', response.result);
     })
@@ -48,8 +46,9 @@ var FileUploader = Backbone.View.extend({
         $dropzone.removeClass('in hover');
       }, 100);
     });
+    // .bind('fileuploadadd', function(ev, data) { })
     // .bind('fileuploadalways',     logf('fileuploadalways'     ))
-    // .bind('fileuploaddone',     logf('fileuploaddone'     ))
+    // .bind('fileuploaddone',       logf('fileuploaddone'     ))
     // .bind('fileuploadfail',       logf('fileuploadfail'       ))
     // .bind('fileuploadfailed',     logf('fileuploadfailed'     ))
     // .bind('fileuploaddestroy',    logf('fileuploaddestroy'    ))

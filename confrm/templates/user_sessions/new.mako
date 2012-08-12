@@ -25,7 +25,7 @@ head(function() {
       if (data.success) {
         $.cookie('ticket', data.ticket, {expires: 31, path: '/'});
         var return_url = window.location.search.match(/[?&]url=([^?&]+)/);
-        // window.location = return_url ? decodeURIComponent(return_url[1]) : '/users/index';
+        window.location = return_url ? decodeURIComponent(return_url[1]) : '/users/index';
       }
     });
   }
