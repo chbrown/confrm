@@ -1,6 +1,6 @@
 // requires jquery, underback, jquery.mustache, and local
 
-var User = Backbone.Model.extend({
+var UserModel = Backbone.Model.extend({
 });
 
 var FileModel = Backbone.Model.extend({
