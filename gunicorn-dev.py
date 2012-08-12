@@ -1,4 +1,3 @@
 import multiprocessing
-
-bind = "unix:/www/confrm/gunicorn.sock"
 workers = multiprocessing.cpu_count()
+bind = "unix:/Users/chbrown/work/confrm-dev/gunicorn.sock"

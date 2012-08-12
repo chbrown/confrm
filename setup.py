@@ -20,6 +20,7 @@ requires = [
     'boto',
     'redis',
     'hiredis',
+    'gunicorn',
     ]
 
 setup(name='confrm',

@@ -28,7 +28,7 @@ class File(BaseModel):
 
     @property
     def filepath(self):
-        return '%s/%d-%s' % (self.directory, self.id, self.safe_filename)
+        return '%s/%05d-%s' % (self.directory, self.id, self.safe_filename)
 
     def read(self, file_contents):
         if not isinstance(file_contents, basestring):
