@@ -19,9 +19,7 @@ def add_user_file(user, filename):
 
 
 class FileHandler(AuthenticatedHandler):
-    def __route__(self, args):
-        self.path = ['files', args[0]]
-        getattr(self, args[0])(*args[1:])
+    path = ('files',)
 
     def index(self, *args):
         group_files = DBSession.query(File).\
@@ -87,8 +85,8 @@ class FileHandler(AuthenticatedHandler):
             with open(file_object.filepath, 'r') as local_fp:
                 self.ctx.contents = local_fp.read(65535)
         elif re.search('jpe?g|png|gif', file_object.filepath, re.I):
-            self.ctx.img = '/files/read/%d' % file_object.id
-        self.ctx.download = '/files/download/%d' % file_object.id
+            self.ctx.img = '/files/%d/read' % file_object.id
+        self.ctx.download = '/files/%d/download' % file_object.id
 
     def read(self, file_id):
         self.file_object = DBSession.query(File).get(file_id)

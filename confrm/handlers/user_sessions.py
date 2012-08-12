@@ -5,9 +5,7 @@ from confrm.lib import random_ticket
 
 
 class UserSessionHandler(BaseHandler):
-    def __route__(self, args):
-        self.path = ['user_sessions', args[0]]
-        getattr(self, args[0])(*args[1:])
+    path = ('user_sessions',)
 
     def new(self):
         pass

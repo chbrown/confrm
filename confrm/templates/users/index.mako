@@ -41,7 +41,7 @@ head.js('/js/lib/jquery.js', '/js/lib/underback.js', '/js/lib/jquery.mustache.js
   });
 
   var importFile = function(file_id) {
-    ajax('/files/as_users/' + file_id, function(data) {
+    ajax('/files/' + file_id + '/as_users', function(data) {
       $table.empty();
       data.users.forEach(function(user) {
         var user_model = new UserModel(user),

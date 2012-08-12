@@ -13,10 +13,15 @@
     <h3>${organization.name}</h3>
     /{organization.slug}
   % endif
-  <a href="/users/index" class="btn"><i class="icon-user"></i> Users</a>
-  <a href="/files/index" class="btn"><i class="icon-file"></i> Files</a>
-  <a href="/groups/index" class="btn"><i class="icon-calendar"></i> Groups</a>
-  <span></span>
+  <a href="/users" class="btn"><i class="icon-user"></i> Users</a>
+  <a href="/files" class="btn"><i class="icon-file"></i> Files</a>
+  <a href="/groups" class="btn"><i class="icon-calendar"></i> Groups</a>
+  <span class="center"></span>
+  <span class="right">
+    % if user:
+      <a href="/users/${user.id}">${user.full_name or user.email}</a>
+    % endif
+  </span>
 </div>
 <div>
   ${next.body()}
@@ -24,8 +29,7 @@
 <script>
 var debug = ${jsonize(debug) | n};
 var flash = window.location.search.match(/[?&]flash=([^?&]+)/);
-// $('.tablesorter').tablesorter();
-// '/js/lib/jquery.tablesorter.js',
+// '/js/lib/jquery.tablesorter.js', // $('.tablesorter').tablesorter();
 head.js('/js/lib/jquery.js', '/js/lib/jquery.flags.js', function() {
   if (flash) $('#navbar h2').flag({text: flash[1].replace(/\+/g, ' '), anchor: 'r'});
 });

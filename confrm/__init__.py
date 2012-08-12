@@ -22,13 +22,13 @@ def main(global_config, **settings):
         config.add_static_view('templates', path='templates/', cache_max_age=1)
 
     # User
-    config.add_route('users', '/users/*args')
+    config.add_route('users', '/users*args')
     config.add_view('confrm.handlers.users.UserHandler', route_name='users')
-    config.add_route('user_sessions', '/user_sessions/*args')
+    config.add_route('user_sessions', '/user_sessions*args')
     config.add_view('confrm.handlers.user_sessions.UserSessionHandler', route_name='user_sessions')
-    config.add_route('files', '/files/*args')
+    config.add_route('files', '/files*args')
     config.add_view('confrm.handlers.files.FileHandler', route_name='files')
-    config.add_route('groups', '/groups/*args')
+    config.add_route('groups', '/groups*args')
     config.add_view('confrm.handlers.groups.GroupHandler', route_name='groups')
 
     config.add_notfound_view('confrm.handlers.error404')

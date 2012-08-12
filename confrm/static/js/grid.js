@@ -4,9 +4,7 @@ var UserModel = Backbone.Model.extend({
 });
 
 var FileModel = Backbone.Model.extend({
-  url: function() {
-    return '/files/show/' + this.get('id');
-  }
+  urlRoot: '/files'
 });
 // FileModel.prototype.beforeGet = function(key) {
 //   if (key === 'contents' && this.get(key) === undefined) {

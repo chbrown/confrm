@@ -26,18 +26,32 @@ class BaseHandler(object):
 
     def __init__(self, request):
         self.request = request
+        self.path = list(self.path)
         self.ctx = AttrDict()
         self.ctx.debug = asbool(request.registry.settings['debug'])
 
         args = list(request.matchdict['args'])
         # self.path = [self.base, args[0]]
-        if args[-1].endswith('.json'):
+        if len(args) > 0 and args[-1].endswith('.json'):
             self.format == 'json'
             args[-1] = args[-1].replace('.json', '')
-        self.__route__(args)
+            if not args[-1]:
+                del args[-1]
+        return self.__rest__(args)
 
-    def __route__(self, args):
-        getattr(self, args[0])(*args[1:])
+    def __rest__(self, parts):
+        args = []
+        if len(parts) == 0:
+            verb = 'create' if self.request.method == 'POST' else 'index'
+        elif parts[0].isdigit():
+            verb = 'update' if self.request.method == 'PUT' else 'show'
+            if len(parts) > 1:
+                verb = parts[1]
+            args = [parts[0]]
+        else:
+            verb = parts[0]
+        self.path.append(verb)
+        return getattr(self, verb)(*args)
 
     def json(self):
         json_string = jsonize(self.ctx)
@@ -52,7 +66,6 @@ class BaseHandler(object):
             try:
                 return render_to_response('/%s.mako' % '/'.join(self.path), self.ctx, request=self.request)
             except TopLevelLookupException:
-                # print 'Could not find mako, resorting to json.'
                 return self.json()
 
     def set(self, **kw):

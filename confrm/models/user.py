@@ -34,7 +34,7 @@ class User(UserSchema):
 
     @property
     def full_name(self):
-        return ' '.join(filter(None, self.first_name, self.last_name))
+        return ' '.join(filter(None, [self.first_name, self.last_name]))
 
     def merge(self, other_user):
         for col in self.__table__.columns:

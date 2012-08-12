@@ -51,7 +51,6 @@ def read_table(filename, fp):
 def guess_headers(rows):
     flat_row_0 = ' '.join(rows[0])
     if len(re.findall('email|first|last|name', flat_row_0, re.I)) > 0:
-        print 'found match'
         return rows[0], rows[1:]
     else:
         # self.ctx.data = rows
@@ -99,8 +98,6 @@ def guess_users(rows):
 
         headers = [vote_counter.most_common(1)[0][0] for vote_counter in votes]
         data = rows
-
-        print max_cols, votes, headers
 
     # now that the headers are set, we'll interpolate the data from rows into dicts
     # note that this is the second iteration of the dat

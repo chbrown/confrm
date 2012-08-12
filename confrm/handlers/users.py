@@ -14,9 +14,7 @@ class UserHandler(AuthenticatedHandler):
     3b. On that page, they can set mappings, functions, cleaners, etc.
     4.  Their settings are saved as an "upload_filter," and they go to /uploads/show?filename=abcdef.xls, to preview the way their data will look like after their filter is applied, resulting in how my app will show it.
     """
-    def __route__(self, args):
-        self.path = ['users', args[0]]
-        getattr(self, args[0])(*args[1:])
+    path = ('users',)
 
     def index(self):
         users = DBSession.query(User).all()
