@@ -1,11 +1,11 @@
 from sqlalchemy.orm import relationship
-from confrm.models import DeclarativeBase
+from confrm.models import BaseModel
 from confrm.models.tables import users, organizations, organizations_users
 
-class Organization(DeclarativeBase):
+class Organization(BaseModel):
     __table__ = organizations
 
-class OrganizationUser(DeclarativeBase):
+class OrganizationUser(BaseModel):
     __table__ = organizations_users
     organization = relationship('Organization', primaryjoin=__table__.c.organization_id==organizations.c.id)
     user =         relationship('User',         primaryjoin=__table__.c.user_id==users.c.id)

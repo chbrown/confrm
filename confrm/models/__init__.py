@@ -1,7 +1,13 @@
 from confrm.session import DBSession, metadata
 from sqlalchemy.ext.declarative import declarative_base
 
-DeclarativeBase = declarative_base(metadata=metadata)
+def update(self, kw):
+    for k, v in kw.items():
+        setattr(self, k, v)
+
+BaseModel = declarative_base(metadata=metadata)
+BaseModel.update = update
+
 
 # class CADMixin(object):
 #     __table__ = None

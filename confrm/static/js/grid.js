@@ -32,26 +32,27 @@ var RowView = Backbone.View.extend({
   }
 });
 
-var UserRow = RowView.extend({
-  render: function() {
-    return this.useTemplate('users/row');
-  }
-});
-
-var FileRow = RowView.extend({
+var StatefulRowView = RowView.extend({
+  state: 'normal',
   events: {
-    'click a.state': 'clickState',
+    'click a.state': 'changeState',
     'click a[data-method=DELETE]': 'clickDelete',
     'click .save': 'save'
   },
-  clickState: function(ev) {
+  changeState: function(ev) {
     ev.preventDefault();
-    var self = this, state = $(ev.target).attr('data-state');
-    this.model.fetch({
-      success: function() {
-        return self.useTemplate('files/row-' + state);
-      }
-    });
+    this.state = $(ev.target).attr('data-state');
+    var self = this;
+    if (this.state !== 'normal') {
+      this.model.fetch({
+        success: function() {
+          self.render();
+        }
+      });
+    }
+    else {
+      this.render();
+    }
   },
   clickDelete: function(ev) {
     ev.preventDefault();
@@ -61,12 +62,34 @@ var FileRow = RowView.extend({
       $a.flag({text: data.message});
     });
   },
+  render: function() {
+    if (this.state === undefined) this.state = 'normal'; // not sure why this happens
+    return this.useTemplate(this.path + '/row-' + this.state);
+  },
   save: function(ev) {
     ev.preventDefault();
-    this.model.save();
-  },
-  render: function() {
-    return this.useTemplate('files/row-normal');
+    console.log('model saving');
+    this.model.save({}, {
+      success: function(model, response) {
+        // console.log('success:data', response);
+        $(ev.target).flag({text: response.message, fade: 2000});
+      }
+    });
+  }
+});
+
+var UserRow = StatefulRowView.extend({
+  path: 'users'
+});
+
+var FileRow = StatefulRowView.extend({
+  path: 'files',
+  events: _.extend({
+    'change textarea': 'changed'
+  }, StatefulRowView.prototype.events),
+  changed: function(ev) {
+    // console.log('content changed');
+    this.model.set('contents', ev.target.value);
   }
 });
 FileRow.addToTable = function(raw_file, $table) {

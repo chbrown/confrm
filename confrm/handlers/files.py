@@ -96,6 +96,16 @@ class FileHandler(AuthenticatedHandler):
         self.read(file_id)
         self.response.content_disposition = 'attachment; filename="%s"' % self.file_object.filename
 
+    def update(self, file_id):
+        file_object = DBSession.query(File).get(file_id)
+        file_object.update(self.request.json_body)
+        if 'contents' in self.request.json_body:
+            file_object.read(self.request.json_body['contents'])
+        DBSession.add(file_object)
+        DBSession.flush()
+
+        self.set(success=True, message='File updated.')
+
     def delete(self, file_id):
         file_object = DBSession.query(File).get(file_id)
         self.can_modify(file_object)

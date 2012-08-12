@@ -1,10 +1,10 @@
 from sqlalchemy.orm import relationship
-from confrm.models import DeclarativeBase, Group, GroupUser, DBSession
-from confrm.models.tables import users, user_sessions, groups, groups_users
+from confrm.models import BaseModel, Group, GroupUser, DBSession
+from confrm.models.tables import users, user_sessions  # , groups, groups_users
 import hashlib
 
 
-class UserSchema(DeclarativeBase):
+class UserSchema(BaseModel):
     __table__ = users
     created_by  = relationship('User', primaryjoin=__table__.c.created_by_id==users.c.id)
     deleted_by  = relationship('User', primaryjoin=__table__.c.deleted_by_id==users.c.id)
@@ -16,7 +16,7 @@ class UserSchema(DeclarativeBase):
     #     secondaryjoin=groups_users.c.group_id==groups.c.id)
 
 
-class UserSession(DeclarativeBase):
+class UserSession(BaseModel):
     __table__ = user_sessions
     user = relationship('User', primaryjoin=__table__.c.user_id==users.c.id)
 

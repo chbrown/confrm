@@ -1,16 +1,16 @@
 import os
 import re
 from pyramid.threadlocal import get_current_registry
-from confrm.models import DeclarativeBase, DBSession, GroupUser
+from confrm.models import BaseModel, DBSession, GroupUser
 from confrm.models.tables import files, files_groups, files_users
 
-class FileGroup(DeclarativeBase):
+class FileGroup(BaseModel):
     __table__ = files_groups
 
-class FileUser(DeclarativeBase):
+class FileUser(BaseModel):
     __table__ = files_users
 
-class File(DeclarativeBase):
+class File(BaseModel):
     __table__ = files
 
     @property
