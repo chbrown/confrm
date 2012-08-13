@@ -8,6 +8,7 @@ README = open(os.path.join(here, 'README.md')).read()
 requires = [
     'pyramid',
     'SQLAlchemy',
+    'sqlalchemy-migrate',
     # 'transaction',
     'pyramid_tm',
     'pyramid_debugtoolbar==1.0.3',
@@ -24,7 +25,7 @@ requires = [
     ]
 
 setup(name='confrm',
-    version='0.0.3',
+    version='0.0.4',
     description='Conference Resource Management',
     long_description=README,
     classifiers=[],
