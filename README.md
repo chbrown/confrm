@@ -22,8 +22,8 @@ It's intended to be a sort of mini-BlackBoard. Except not violating every conven
     createdb confrm_dev
     # migrate create db_repo "ConfRM Database Repository"
     # migrate manage db_repo/manage.py --repository=db_repo --url=postgresql://localhost/confrm_dev
-    python db_repo/manage.py version_control
-    python db_repo/manage.py upgrade
+    python db_repo/manage.py version_control --config=production.ini
+    python db_repo/manage.py upgrade --config=production.ini
 
     # Get started with a root user, at the CLI:
     python confrm/scripts/add.py development.ini --user-email audiere@gmail.com \
