@@ -11,7 +11,7 @@
 head.ls = function(scripts, callback) {
   if (callback) scripts.push(callback);
   head.js.apply(head, scripts);
-}) 
+})
 var debug = ${jsonize(debug) | n},
   script = {
     jquery: '/js/lib/jquery.js',
@@ -28,11 +28,11 @@ var debug = ${jsonize(debug) | n},
     models: '/js/models.js'
   },
   scripts = {
-    uploader: [script.jquery, script.underback, script.jqueryui, script.jqueryfileupload, 
+    uploader: [script.jquery, script.underback, script.jqueryui, script.jqueryfileupload,
       script.jqueryfileuploadui, script.fileupload, script.mu, script.local, script.models],
     flags: [script.jquery, script.flags],
     basic: [script.jquery, script.underback, script.local, script.models],
-    // script.date, script.jquerycookie, 
+    // script.date, script.jquerycookie,
   };
 </script>
 

@@ -30,7 +30,7 @@
 
 <script>
 var users = ${jsonize(users) | n};
-// accept files directly on this page. When a file is dragged over, instantly allow uploading it, perhaps 
+// accept files directly on this page. When a file is dragged over, instantly allow uploading it, perhaps
 // to-do: support non-dragging?
 head.js('/js/lib/jquery.js', '/js/lib/underback.js', '/js/lib/jquery.mustache.js', '/js/local.js', '/js/grid.js', function() {
   var $table = $('table.table tbody');
