@@ -5,7 +5,7 @@
   <div class="well form-vertical">
     <div class="control-group">
       <label for="email">Email</label>
-      <input type="text" id="email" />
+      <input type="text" id="email" class="focal-point" />
     </div>
     <div class="control-group">
       <label for="password">Password</label>

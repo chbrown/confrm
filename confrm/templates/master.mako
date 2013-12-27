@@ -7,6 +7,35 @@
 <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
 <title>ConfRM</title>
 <script src="/js/lib/head.js"></script>
+<script>
+head.ls = function(scripts, callback) {
+  if (callback) scripts.push(callback);
+  head.js.apply(head, scripts);
+}) 
+var debug = ${jsonize(debug) | n},
+  script = {
+    jquery: '/js/lib/jquery.js',
+    underback: '/js/lib/underback.js',
+    jqueryui: '/js/lib/jquery-ui.js',
+    jqueryfileupload: '/js/lib/jquery.fileupload.js',
+    jqueryfileuploadui: '/js/lib/jquery.fileupload-ui.js',
+    jquerycookie: '/js/lib/jquery.cookie.js',
+    date: '/js/lib/date.js',
+    mu: '/js/lib/jquery.mustache.js',
+
+    forms: '/js/forms.js',
+    local: '/js/local.js',
+    models: '/js/models.js'
+  },
+  scripts = {
+    uploader: [script.jquery, script.underback, script.jqueryui, script.jqueryfileupload, 
+      script.jqueryfileuploadui, script.fileupload, script.mu, script.local, script.models],
+    flags: [script.jquery, script.flags],
+    basic: [script.jquery, script.underback, script.local, script.models],
+    // script.date, script.jquerycookie, 
+  };
+</script>
+
 <div id="navbar">
   <h2>ConfRM</h2>
   % if organization:
@@ -27,11 +56,15 @@
   ${next.body()}
 </div>
 <script>
-var debug = ${jsonize(debug) | n};
-var flash = window.location.search.match(/[?&]flash=([^?&]+)/);
-// '/js/lib/jquery.tablesorter.js', // $('.tablesorter').tablesorter();
-head.js('/js/lib/jquery.js', '/js/lib/jquery.flags.js', function() {
-  if (flash) $('#navbar h2').flag({text: flash[1].replace(/\+/g, ' '), anchor: 'r'});
-});
-head.js('/js/lib/underscore.js').js('/js/lib/date.js').js('/js/local.js').js('/js/lib/jquery.cookie.js');
+flash = window.location.search.match(/[?&]flash=([^?&]+)/),
+head.js(scripts.flags, function() {
+  if (flash) {
+    var $focal_point = $('.focal-point');
+    if (!$focal_point.length) $focal_point = $('#navbar h2');
+    $focal_point.flag({
+      text: flash[1].replace(/\+/g, ' '),
+      anchor: 'l'
+    });
+  }
+}).js(script.basic);
 </script>

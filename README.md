@@ -28,10 +28,10 @@ It's intended to be a sort of mini-BlackBoard. Except not violating every conven
     # Get started with a root user, at the CLI:
     python confrm/scripts/add.py development.ini --user-email audiere@gmail.com \
       --user-password needle --org-slug nasslli2012 --org-name "NASSLLI 2012"
-  
+
 ## Amazon SES Config
 
-The app uses Amazon (AWS) Simple Email Service to send email, and `boto` as the API driver. SES pricing, $0.10 per thousand emails, isn't bad, I'd say—because `postfix` is a pain to configure.
+The app uses Amazon (AWS) Simple Email Service to send email, and `boto` as the API driver. SES pricing, $0.10 per thousand emails, isn't bad, I'd say--- because `postfix` is a pain to configure.
 
 Put the following in /etc/boto.cfg
 
@@ -59,7 +59,7 @@ Those keys are nonsense, of course. You must replace them with your own credenti
     users.c.role.drop()
 
 004_Add_fks_to_users_and_events.py
-    
+
     from sqlalchemy import Table, MetaData
     from migrate.changeset.constraint import ForeignKeyConstraint
     meta = MetaData()
@@ -99,11 +99,15 @@ This is not a big issue, since most deploys will be 1-organization. But you can 
    2. Forward that on to all members of that group.
 9. Allow uploads via incoming emails:
    1. Use keywords from subject line to auto-share with group
-   2. 
+   2.
 10. Allow sub-group sharing of files, user-to-user.
    1. Just a simple many-2-many between users.
 
 # underback.js
 
-j confrm static js lib
-cat underscore.js backbone.js | jsmin > underback.js
+    j confrm static js lib
+    cat underscore.js backbone.js | jsmin > underback.js
+
+# Competitors / references:
+
+* http://www.conftool.net/

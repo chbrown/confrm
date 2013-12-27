@@ -81,14 +81,17 @@ class FileHandler(AuthenticatedHandler):
     def show(self, file_id):
         file_object = DBSession.query(File).get(file_id)
         self.set(**file_object.__json__())
-        if re.search('txt|csv|tab|tsv', file_object.filepath, re.I) or '.' not in file_object.filepath:
-            with open(file_object.filepath, 'r') as local_fp:
-                self.ctx.contents = local_fp.read(65535)
+        if re.search('(^[^.]|txt|csv|tab|tsv)$', file_object.filepath, re.I):
+            try:
+                self.ctx.contents = open(file_object.filepath).read(65535)
+            except:
+                self.ctx.message = 'File failed'
         elif re.search('jpe?g|png|gif', file_object.filepath, re.I):
             self.ctx.img = '/files/%d/read' % file_object.id
         self.ctx.download = '/files/%d/download' % file_object.id
 
     def read(self, file_id):
+        # this is a publically accessible action!
         self.file_object = DBSession.query(File).get(file_id)
         self.response = FileResponse(self.file_object.filepath)
 
@@ -102,7 +105,7 @@ class FileHandler(AuthenticatedHandler):
         if 'contents' in self.request.json_body:
             file_object.read(self.request.json_body['contents'])
         DBSession.add(file_object)
-        DBSession.flush()
+        # DBSession.flush()
 
         self.set(success=True, message='File updated.')
 
