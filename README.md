@@ -2,19 +2,11 @@
 
 ConfRM, which stands for Conference Resource Management, intends to be a way to annotate and manage groups of users. Primary functionality is (/will be):
 
-1. Uploading and importing from several different kinds of spreadsheet (XLS, XLSX, csv, tab), with duplicate handling.
+1. Uploading and importing from several different kinds of spreadsheet (XLSX, csv, tab), with duplicate handling.
 2. Sending emails to groups of users, by tag or group or other filter.
 3. Uploading files to be shared by groups or users to see.
 
 It's intended to be a sort of mini-BlackBoard. Except not violating every convention of web UX.
-
-## Running for Development
-
-    j confrm-dev
-    source bin/activate
-    cd src/
-    python setup.py develop
-    pserve --reload development.ini
 
 ## DB Initialization / updates
 
@@ -31,7 +23,7 @@ It's intended to be a sort of mini-BlackBoard. Except not violating every conven
 
 ## Amazon SES Config
 
-The app uses Amazon (AWS) Simple Email Service to send email, and `boto` as the API driver. SES pricing, $0.10 per thousand emails, isn't bad, I'd say--- because `postfix` is a pain to configure.
+The app uses Amazon (AWS) Simple Email Service to send email, and `boto` as the API driver. SES pricing, $0.10 per thousand emails, isn't bad, I'd say—because `postfix` is a pain to configure.
 
 Put the following in /etc/boto.cfg
 
@@ -105,9 +97,5 @@ This is not a big issue, since most deploys will be 1-organization. But you can 
 
 # underback.js
 
-    j confrm static js lib
-    cat underscore.js backbone.js | jsmin > underback.js
-
-# Competitors / references:
-
-* http://www.conftool.net/
+j confrm static js lib
+cat underscore.js backbone.js | jsmin > underback.js
